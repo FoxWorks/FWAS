@@ -28,9 +28,29 @@
 #include "fwas.h"
 
 
+////////////////////////////////////////////////////////////////////////////////
+/// Initialize object
+////////////////////////////////////////////////////////////////////////////////
+int FWAS_EVDS_Callback_PostInitialize(EVDS_SYSTEM* system, EVDS_SOLVER* solver, EVDS_OBJECT* object) {
+	FWAS_EVDS_USERDATA* userdata = malloc(sizeof(FWAS_EVDS_USERDATA));
+	memset(userdata,0,sizeof(FWAS_EVDS_USERDATA));
+
+	//Generate mesh for the object
+	EVDS_Mesh_Generate(object,&userdata->mesh,0.1f,0);
+
+	//Set as userdata
+	EVDS_Object_SetUserdata(object,userdata);
+	return EVDS_OK;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
 /// Initialize simulator
+////////////////////////////////////////////////////////////////////////////////
 int FWAS_Initialize(FWAS** p_simulator) {
 	FWAS* simulator;
+	EVDS_OBJECT* root;
+	EVDS_GLOBAL_CALLBACKS callbacks = { 0 };
 
 	//Create new simulator
 	simulator = malloc(sizeof(FWAS));
@@ -40,11 +60,25 @@ int FWAS_Initialize(FWAS** p_simulator) {
 
 	//Initialize EVDS
 	EVDS_System_Create(&simulator->system);
+	EVDS_Common_Register(simulator->system);
+
+	//Set proper callbacks
+	callbacks.OnInitialize = 0;
+	callbacks.OnPostInitialize = FWAS_EVDS_Callback_PostInitialize;
+	callbacks.OnDeinitialize = 0;
+	EVDS_System_SetGlobalCallbacks(simulator->system,&callbacks);
+
+	EVDS_System_GetRootInertialSpace(simulator->system,&root);	
+	EVDS_Object_LoadFromFile(root,"./Resources/plugins/fwas_x-plane/testvehicle.evds",&simulator->test);
+	EVDS_Object_Initialize(simulator->test,1);
 	return 1;
 
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
 /// Deinitialize simulator
+////////////////////////////////////////////////////////////////////////////////
 void FWAS_Deinitialize(FWAS* simulator) {
 
 }

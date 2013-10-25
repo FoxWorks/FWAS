@@ -56,7 +56,8 @@ int XPluginDrawCallback(XPLMDrawingPhase phase, int isBefore, void* refcon) {
 			XPLMSetGraphicsState(0,0,1,0,0,1,1);
 			glPushMatrix();
 			glTranslatef(XPLMGetDataf(dataref_x),XPLMGetDataf(dataref_y),XPLMGetDataf(dataref_z));
-			glBegin(GL_QUADS);
+			XPFWAS_DrawObject(simulator->test);
+			/*glBegin(GL_QUADS);
 				glColor3f(0.0f,1.0f,0.0f);
 				glVertex3f( dX  , dYZ ,-dYZ );
 				glVertex3f(-0.0f, dYZ ,-dYZ );
@@ -87,7 +88,7 @@ int XPluginDrawCallback(XPLMDrawingPhase phase, int isBefore, void* refcon) {
 				glVertex3f( dX  , dYZ , dYZ );
 				glVertex3f( dX  ,-dYZ , dYZ );
 				glVertex3f( dX  ,-dYZ ,-dYZ );
-			glEnd();
+			glEnd();*/
 			glPopMatrix();
 
 		case xplm_Phase_Panel:
@@ -107,7 +108,7 @@ float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFl
 	float q[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 	XPLMSetDataf(dataref_x,0.0);
-	XPLMSetDataf(dataref_y,100000.0+500.0+100000.0*sin(counter*0.01f));
+	XPLMSetDataf(dataref_y,1000.0);
 	XPLMSetDataf(dataref_z,0.0);
 	XPLMSetDataf(dataref_vx,0.0);
 	XPLMSetDataf(dataref_vy,0.0);

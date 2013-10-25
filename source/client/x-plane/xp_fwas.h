@@ -63,7 +63,9 @@
 #	define snscanf _snscanf
 #endif
 
-
-//
+// Draw a single mesh
+void XPFWAS_DrawMesh(EVDS_MESH* mesh);
+// Draw an object
+void XPFWAS_DrawObject(EVDS_OBJECT* object);
 
 #endif

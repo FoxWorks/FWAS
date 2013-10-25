@@ -43,16 +43,17 @@ extern "C" {
 ////////////////////////////////////////////////////////////////////////////////
 typedef struct FWAS_TAG {
 	EVDS_SYSTEM* system;
+	EVDS_OBJECT* test;
 } FWAS;
 
 
 ////////////////////////////////////////////////////////////////////////////////
 /// @brief Userdata for the EVDS object
 ////////////////////////////////////////////////////////////////////////////////
-typedef struct FWAS_USERDATA_TAG {
+typedef struct FWAS_EVDS_USERDATA_TAG {
 	EVDS_OBJECT* object;
-	EVDS_MESH mesh;
-} FWAS_USERDATA;
+	EVDS_MESH* mesh;
+} FWAS_EVDS_USERDATA;
 
 
 
@@ -60,6 +61,7 @@ typedef struct FWAS_USERDATA_TAG {
 ////////////////////////////////////////////////////////////////////////////////
 /// Initialize simulator
 int FWAS_Initialize(FWAS** p_simulator);
+
 /// Deinitialize simulator
 void FWAS_Deinitialize(FWAS* simulator);
 
