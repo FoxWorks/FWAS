@@ -204,15 +204,15 @@ void xivss_reinitialize() {
 //==============================================================================
 PLUGIN_API int XPluginStart(char* outName, char* outSig, char* outDesc)
 {
-	strcpy(outName, "X-IVSS");
-	strcpy(outDesc, "Internal Vessels Systems Simulation for X-Plane");
-	strcpy(outSig, "xsag.xivss");
+	strcpy(outName, "FWAS X-Plane Client");
+	strcpy(outDesc, "X-Plane client for FoxWorks Aerospace Simulator");
+	strcpy(outSig, "xsag.fwas_x-plane");
 
 	//video_scroll_x = XPLMFindDataRef("sim/graphics/misc/current_scroll_pos_x");
 	//video_scroll_y = XPLMFindDataRef("sim/graphics/misc/current_scroll_pos");
 	//simulator_paused = XPLMFindDataRef("sim/time/paused");
 
-	XPLMDebugString("X-IVSS: Plugin loaded\n");
+	XPLMDebugString("FWAS: Client initialized\n");
 	return 1;
 }
 
@@ -223,7 +223,7 @@ PLUGIN_API int XPluginStart(char* outName, char* outSig, char* outDesc)
 PLUGIN_API int XPluginEnable(void)
 {
 	xivss_reinitialize();
-	log_write("X-IVSS: Plugin enabled\n");
+	log_write("FWAS: Client started\n");
 
 	//Register callbacks
 	XPLMRegisterFlightLoopCallback(XPluginFlightLoop, -1, NULL);
@@ -242,7 +242,7 @@ PLUGIN_API int XPluginEnable(void)
 PLUGIN_API void XPluginDisable(void)
 {
 	//if (ivss_system) IVSS_System_Destroy(&ivss_system);
-	log_write("X-IVSS: Plugin disabled\n");
+	log_write("FWAS: Client stopped\n");
 
 	//Unregister callbacks
 	XPLMUnregisterFlightLoopCallback(XPluginFlightLoop, NULL);
