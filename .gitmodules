@@ -1,0 +1,12 @@
+[submodule "external/simc"]
+	path = external/simc
+	url = https://github.com/FoxWorks/SIMC
+[submodule "external/evds"]
+	path = external/evds
+	url = https://github.com/FoxWorks/EVDS
+[submodule "external/ivss"]
+	path = external/ivss
+	url = https://github.com/FoxWorks/IVSS
+[submodule "external/rdrs"]
+	path = external/rdrs
+	url = https://github.com/FoxWorks/RDRS
