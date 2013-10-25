@@ -43,7 +43,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
 				PreprocessorDefinitions="DEBUG;_CRT_SECURE_NO_WARNINGS;WIN32;IBM"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,14 +61,14 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="DEBUG;_CRT_SECURE_NO_WARNINGS;WIN32;IBM"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\bin\fwas_cored32.lib ..\..\bin\evdsd32.lib ..\..\bin\simcd32.lib XPLM.lib XPWidgets.lib"
+				AdditionalDependencies="..\..\bin\fwas_cored32.lib ..\..\bin\evdsd32.lib ..\..\bin\simcd32.lib opengl32.lib XPLM.lib XPWidgets.lib"
 				OutputFile="$(OutDir)\win.xpl"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\external\xpsdk201\Libraries\Win"
@@ -129,7 +129,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
 				PreprocessorDefinitions="DEBUG;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;IBM"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -147,14 +147,14 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="DEBUG;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;IBM"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\bin\fwas_cored.lib ..\..\bin\evdsd.lib ..\..\bin\simcd.lib XPLM_64.lib XPWidgets_64.lib"
+				AdditionalDependencies="..\..\bin\fwas_cored.lib ..\..\bin\evdsd.lib ..\..\bin\simcd.lib opengl32.lib XPLM_64.lib XPWidgets_64.lib"
 				OutputFile="$(OutDir)\win.xpl"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\external\xpsdk212\Libraries\Win"
@@ -214,7 +214,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="3"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
 				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;WIN32;IBM"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -231,14 +231,14 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;WIN32;IBM"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\bin\fwas_core32.lib ..\..\bin\evds32.lib ..\..\bin\simc32.lib XPLM.lib XPWidgets.lib"
+				AdditionalDependencies="..\..\bin\fwas_core32.lib ..\..\bin\evds32.lib ..\..\bin\simc32.lib opengl32.lib XPLM.lib XPWidgets.lib"
 				OutputFile="$(OutDir)\win.xpl"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\external\xpsdk201\Libraries\Win"
@@ -301,7 +301,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="3"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
 				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;IBM"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -318,14 +318,14 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;IBM"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\bin\fwas_core.lib ..\..\bin\evds.lib ..\..\bin\simc.lib XPLM_64.lib XPWidgets_64.lib"
+				AdditionalDependencies="..\..\bin\fwas_core.lib ..\..\bin\evds.lib ..\..\bin\simc.lib opengl32.lib XPLM_64.lib XPWidgets_64.lib"
 				OutputFile="$(OutDir)\win.xpl"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\external\xpsdk212\Libraries\Win"
@@ -387,7 +387,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
 				PreprocessorDefinitions="DEBUG;EVDS_DYNAMIC;IVSS_DYNAMIC;RDRS_DYNAMIC;SIMC_DYNAMIC;_CRT_SECURE_NO_WARNINGS;WIN32;IBM"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -405,14 +405,14 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="DEBUG;EVDS_DYNAMIC;IVSS_DYNAMIC;RDRS_DYNAMIC;SIMC_DYNAMIC;_CRT_SECURE_NO_WARNINGS;WIN32;IBM"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\bin\fwas_cored32.lib ..\..\bin\evdsd32.lib ..\..\bin\simcd32.lib XPLM.lib XPWidgets.lib"
+				AdditionalDependencies="..\..\bin\fwas_cored32.lib ..\..\bin\evdsd32.lib ..\..\bin\simcd32.lib opengl32.lib XPLM.lib XPWidgets.lib"
 				OutputFile="$(OutDir)\win.xpl"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\external\xpsdk201\Libraries\Win"
@@ -473,7 +473,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
 				PreprocessorDefinitions="DEBUG;EVDS_DYNAMIC;IVSS_DYNAMIC;RDRS_DYNAMIC;SIMC_DYNAMIC;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;IBM"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -491,14 +491,14 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="DEBUG;EVDS_DYNAMIC;IVSS_DYNAMIC;RDRS_DYNAMIC;SIMC_DYNAMIC;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;IBM"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\bin\fwas_cored.lib ..\..\bin\evdsd.lib ..\..\bin\simcd.lib XPLM_64.lib XPWidgets_64.lib"
+				AdditionalDependencies="..\..\bin\fwas_cored.lib ..\..\bin\evdsd.lib ..\..\bin\simcd.lib opengl32.lib XPLM_64.lib XPWidgets_64.lib"
 				OutputFile="$(OutDir)\win.xpl"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\external\xpsdk212\Libraries\Win"
@@ -558,7 +558,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="3"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
 				PreprocessorDefinitions="EVDS_DYNAMIC;IVSS_DYNAMIC;RDRS_DYNAMIC;SIMC_DYNAMIC;_CRT_SECURE_NO_WARNINGS;WIN32;IBM"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -575,14 +575,14 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="EVDS_DYNAMIC;IVSS_DYNAMIC;RDRS_DYNAMIC;SIMC_DYNAMIC;_CRT_SECURE_NO_WARNINGS;WIN32;IBM"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\bin\fwas_core32.lib ..\..\bin\evds32.lib ..\..\bin\simc32.lib XPLM.lib XPWidgets.lib"
+				AdditionalDependencies="..\..\bin\fwas_core32.lib ..\..\bin\evds32.lib ..\..\bin\simc32.lib opengl32.lib XPLM.lib XPWidgets.lib"
 				OutputFile="$(OutDir)\win.xpl"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\external\xpsdk201\Libraries\Win"
@@ -645,7 +645,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="3"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
 				PreprocessorDefinitions="EVDS_DYNAMIC;IVSS_DYNAMIC;RDRS_DYNAMIC;SIMC_DYNAMIC;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;IBM"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -662,14 +662,14 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="EVDS_DYNAMIC;IVSS_DYNAMIC;RDRS_DYNAMIC;SIMC_DYNAMIC;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;IBM"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\bin\fwas_core.lib ..\..\bin\evds.lib ..\..\bin\simc.lib XPLM_64.lib XPWidgets_64.lib"
+				AdditionalDependencies="..\..\bin\fwas_core.lib ..\..\bin\evds.lib ..\..\bin\simc.lib opengl32.lib XPLM_64.lib XPWidgets_64.lib"
 				OutputFile="$(OutDir)\win.xpl"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\external\xpsdk212\Libraries\Win"
@@ -731,7 +731,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
 				PreprocessorDefinitions="DEBUG;EVDS_SINGLETHREADED;IVSS_SINGLETHREADED;RDRS_SINGLETHREADED;SIMC_SINGLETHREADED;_CRT_SECURE_NO_WARNINGS;WIN32;IBM"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -749,14 +749,14 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="DEBUG;EVDS_SINGLETHREADED;IVSS_SINGLETHREADED;RDRS_SINGLETHREADED;SIMC_SINGLETHREADED;_CRT_SECURE_NO_WARNINGS;WIN32;IBM"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\bin\fwas_core_std32.lib ..\..\bin\evds_std32.lib ..\..\bin\simc_std32.lib XPLM.lib XPWidgets.lib"
+				AdditionalDependencies="..\..\bin\fwas_core_std32.lib ..\..\bin\evds_std32.lib ..\..\bin\simc_std32.lib opengl32.lib XPLM.lib XPWidgets.lib"
 				OutputFile="$(OutDir)\win.xpl"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\external\xpsdk201\Libraries\Win"
@@ -817,7 +817,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
 				PreprocessorDefinitions="DEBUG;EVDS_SINGLETHREADED;IVSS_SINGLETHREADED;RDRS_SINGLETHREADED;SIMC_SINGLETHREADED;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;IBM"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -835,14 +835,14 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="DEBUG;EVDS_SINGLETHREADED;IVSS_SINGLETHREADED;RDRS_SINGLETHREADED;SIMC_SINGLETHREADED;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;IBM"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\bin\fwas_core_std.lib ..\..\bin\evds_std.lib ..\..\bin\simc_std.lib XPLM_64.lib XPWidgets_64.lib"
+				AdditionalDependencies="..\..\bin\fwas_core_std.lib ..\..\bin\evds_std.lib ..\..\bin\simc_std.lib opengl32.lib XPLM_64.lib XPWidgets_64.lib"
 				OutputFile="$(OutDir)\win.xpl"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\external\xpsdk212\Libraries\Win"
@@ -902,7 +902,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="3"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
 				PreprocessorDefinitions="EVDS_SINGLETHREADED;IVSS_SINGLETHREADED;RDRS_SINGLETHREADED;SIMC_SINGLETHREADED;_CRT_SECURE_NO_WARNINGS;WIN32;IBM"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -919,14 +919,14 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="EVDS_SINGLETHREADED;IVSS_SINGLETHREADED;RDRS_SINGLETHREADED;SIMC_SINGLETHREADED;_CRT_SECURE_NO_WARNINGS;WIN32;IBM"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\bin\fwas_core_st32.lib ..\..\bin\evds_st32.lib ..\..\bin\simc_st32.lib XPLM.lib XPWidgets.lib"
+				AdditionalDependencies="..\..\bin\fwas_core_st32.lib ..\..\bin\evds_st32.lib ..\..\bin\simc_st32.lib opengl32.lib XPLM.lib XPWidgets.lib"
 				OutputFile="$(OutDir)\win.xpl"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\external\xpsdk201\Libraries\Win"
@@ -989,7 +989,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="3"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
 				PreprocessorDefinitions="EVDS_SINGLETHREADED;IVSS_SINGLETHREADED;RDRS_SINGLETHREADED;SIMC_SINGLETHREADED;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;IBM"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -1006,14 +1006,14 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="EVDS_SINGLETHREADED;IVSS_SINGLETHREADED;RDRS_SINGLETHREADED;SIMC_SINGLETHREADED;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;IBM"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\bin\fwas_core_st.lib ..\..\bin\evds_st.lib ..\..\bin\simc_st.lib XPLM_64.lib XPWidgets_64.lib"
+				AdditionalDependencies="..\..\bin\fwas_core_st.lib ..\..\bin\evds_st.lib ..\..\bin\simc_st.lib opengl32.lib XPLM_64.lib XPWidgets_64.lib"
 				OutputFile="$(OutDir)\win.xpl"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\external\xpsdk212\Libraries\Win"
@@ -1075,7 +1075,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
 				PreprocessorDefinitions="DEBUG;EVDS_DYNAMIC;IVSS_DYNAMIC;RDRS_DYNAMIC;SIMC_DYNAMIC;EVDS_SINGLETHREADED;IVSS_SINGLETHREADED;RDRS_SINGLETHREADED;SIMC_SINGLETHREADED;_CRT_SECURE_NO_WARNINGS;WIN32;IBM"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -1093,14 +1093,14 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="DEBUG;EVDS_DYNAMIC;IVSS_DYNAMIC;RDRS_DYNAMIC;SIMC_DYNAMIC;EVDS_SINGLETHREADED;IVSS_SINGLETHREADED;RDRS_SINGLETHREADED;SIMC_SINGLETHREADED;_CRT_SECURE_NO_WARNINGS;WIN32;IBM"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\bin\fwas_core_std32.lib ..\..\bin\evds_std32.lib ..\..\bin\simc_std32.lib XPLM.lib XPWidgets.lib"
+				AdditionalDependencies="..\..\bin\fwas_core_std32.lib ..\..\bin\evds_std32.lib ..\..\bin\simc_std32.lib opengl32.lib XPLM.lib XPWidgets.lib"
 				OutputFile="$(OutDir)\win.xpl"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\external\xpsdk201\Libraries\Win"
@@ -1161,7 +1161,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
 				PreprocessorDefinitions="DEBUG;EVDS_DYNAMIC;IVSS_DYNAMIC;RDRS_DYNAMIC;SIMC_DYNAMIC;EVDS_SINGLETHREADED;IVSS_SINGLETHREADED;RDRS_SINGLETHREADED;SIMC_SINGLETHREADED;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;IBM"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -1179,14 +1179,14 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="DEBUG;EVDS_DYNAMIC;IVSS_DYNAMIC;RDRS_DYNAMIC;SIMC_DYNAMIC;EVDS_SINGLETHREADED;IVSS_SINGLETHREADED;RDRS_SINGLETHREADED;SIMC_SINGLETHREADED;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;IBM"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\bin\fwas_core_std.lib ..\..\bin\evds_std.lib ..\..\bin\simc_std.lib XPLM_64.lib XPWidgets_64.lib"
+				AdditionalDependencies="..\..\bin\fwas_core_std.lib ..\..\bin\evds_std.lib ..\..\bin\simc_std.lib opengl32.lib XPLM_64.lib XPWidgets_64.lib"
 				OutputFile="$(OutDir)\win.xpl"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\external\xpsdk212\Libraries\Win"
@@ -1246,7 +1246,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="3"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
 				PreprocessorDefinitions="EVDS_DYNAMIC;IVSS_DYNAMIC;RDRS_DYNAMIC;SIMC_DYNAMIC;EVDS_SINGLETHREADED;IVSS_SINGLETHREADED;RDRS_SINGLETHREADED;SIMC_SINGLETHREADED;_CRT_SECURE_NO_WARNINGS;WIN32;IBM"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -1263,14 +1263,14 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="EVDS_DYNAMIC;IVSS_DYNAMIC;RDRS_DYNAMIC;SIMC_DYNAMIC;EVDS_SINGLETHREADED;IVSS_SINGLETHREADED;RDRS_SINGLETHREADED;SIMC_SINGLETHREADED;_CRT_SECURE_NO_WARNINGS;WIN32;IBM"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk201\CHeaders\Widgets;..\..\external\xpsdk201\CHeaders\XPLM"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\bin\fwas_core_st32.lib ..\..\bin\evds_st32.lib ..\..\bin\simc_st32.lib XPLM.lib XPWidgets.lib"
+				AdditionalDependencies="..\..\bin\fwas_core_st32.lib ..\..\bin\evds_st32.lib ..\..\bin\simc_st32.lib opengl32.lib XPLM.lib XPWidgets.lib"
 				OutputFile="$(OutDir)\win.xpl"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\external\xpsdk201\Libraries\Win"
@@ -1333,7 +1333,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="3"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
 				PreprocessorDefinitions="EVDS_DYNAMIC;IVSS_DYNAMIC;RDRS_DYNAMIC;SIMC_DYNAMIC;EVDS_SINGLETHREADED;IVSS_SINGLETHREADED;RDRS_SINGLETHREADED;SIMC_SINGLETHREADED;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;IBM"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -1350,14 +1350,14 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="EVDS_DYNAMIC;IVSS_DYNAMIC;RDRS_DYNAMIC;SIMC_DYNAMIC;EVDS_SINGLETHREADED;IVSS_SINGLETHREADED;RDRS_SINGLETHREADED;SIMC_SINGLETHREADED;_CRT_SECURE_NO_WARNINGS;WIN32;WIN64;IBM"
-				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
+				AdditionalIncludeDirectories="..\..\external\simc\include;..\..\external\evds\include;..\..\external\rdrs\include;..\..\external\evds\addons;..\..\source\core;..\..\external\xpsdk212\CHeaders\Widgets;..\..\external\xpsdk212\CHeaders\XPLM"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\bin\fwas_core_st.lib ..\..\bin\evds_st.lib ..\..\bin\simc_st.lib XPLM_64.lib XPWidgets_64.lib"
+				AdditionalDependencies="..\..\bin\fwas_core_st.lib ..\..\bin\evds_st.lib ..\..\bin\simc_st.lib opengl32.lib XPLM_64.lib XPWidgets_64.lib"
 				OutputFile="$(OutDir)\win.xpl"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\external\xpsdk212\Libraries\Win"
@@ -1406,6 +1406,10 @@
 				Name="x-plane"
 				Filter=""
 				>
+				<File
+					RelativePath="..\..\source\client\x-plane\xp_fwas.h"
+					>
+				</File>
 				<File
 					RelativePath="..\..\source\client\x-plane\xp_main.c"
 					>

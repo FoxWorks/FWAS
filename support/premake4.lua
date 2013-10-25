@@ -75,12 +75,17 @@ project "fwas_x-plane"
      "../external/evds/include",
      "../external/rdrs/include",
      "../external/evds/addons",
+     "../source/core",
    }
    files {
      "../source/client/x-plane/xp_*.c",
      "../source/client/x-plane/xp_*.h",
    }
    links { "fwas_core","evds","simc" } --"rdrs","ivss"
+   
+   -- OpenGL required under windows
+   configuration { "windows" }
+      links { "opengl32" }
    
    -- Include X-Plane SDK
    configuration { "x32" }
