@@ -29,7 +29,18 @@
 
 
 /// Initialize simulator
-void FWAS_Initialize(FWAS** p_simulator) {
+int FWAS_Initialize(FWAS** p_simulator) {
+	FWAS* simulator;
+
+	//Create new simulator
+	simulator = malloc(sizeof(FWAS));
+	*p_simulator = simulator;
+	if (!simulator) return 0;
+	memset(simulator,0,sizeof(FWAS));
+
+	//Initialize EVDS
+	EVDS_System_Create(&simulator->system);
+	return 1;
 
 }
 

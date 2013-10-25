@@ -14,6 +14,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// Local state of the currently active vessel (overrides X-Plane camera)
 ////////////////////////////////////////////////////////////////////////////////
+FWAS* simulator;
 XPLMDataRef dataref_paused;
 XPLMDataRef dataref_x;
 XPLMDataRef dataref_y;
@@ -150,6 +151,7 @@ PLUGIN_API int XPluginStart(char* outName, char* outSig, char* outDesc) {
 /// Plugin initialization
 ////////////////////////////////////////////////////////////////////////////////
 PLUGIN_API int XPluginEnable(void) {
+	FWAS_Initialize(&simulator);
 	log_write("FWAS: Client started\n");
 
 	//Register callbacks
@@ -168,6 +170,7 @@ PLUGIN_API int XPluginEnable(void) {
 /// Plugin deinitialization
 ////////////////////////////////////////////////////////////////////////////////
 PLUGIN_API void XPluginDisable(void) {
+	FWAS_Deinitialize(simulator);
 	log_write("FWAS: Client stopped\n");
 
 	//Unregister callbacks
