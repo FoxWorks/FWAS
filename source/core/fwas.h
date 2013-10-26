@@ -39,12 +39,23 @@ extern "C" {
 
 
 
+/// Callback when FWAS logs a message
+typedef void FWAS_Callback_Log(int level, char* message, ...);
+/// Information message
+#define FWAS_MESSAGE_INFO		0
+/// Warning message
+#define FWAS_MESSAGE_WARNING	1
+/// Error message
+#define FWAS_MESSAGE_ERROR		2
+
+
 ////////////////////////////////////////////////////////////////////////////////
 /// @brief FoxWorks Aerospace Simulator state
 ////////////////////////////////////////////////////////////////////////////////
 typedef struct FWAS_TAG {
 	EVDS_SYSTEM* system;
-	EVDS_OBJECT* test;
+	EVDS_OBJECT* active_vessel;
+	FWAS_Callback_Log* log;
 } FWAS;
 
 
@@ -62,9 +73,22 @@ typedef struct FWAS_EVDS_USERDATA_TAG {
 ////////////////////////////////////////////////////////////////////////////////
 /// Initialize simulator
 int FWAS_Initialize(FWAS** p_simulator);
+/// Set logging callback
+void FWAS_SetCallback_Log(FWAS* simulator, FWAS_Callback_Log* onLog);
 
 /// Deinitialize simulator
 void FWAS_Deinitialize(FWAS* simulator);
+
+/// Set Earth and Moon simulation scene
+void FWAS_SetScene_EarthMoon(FWAS* simulator);
+
+/// Load a vessel from file
+EVDS_OBJECT* FWAS_Vessel_Load(FWAS* simulator, char* filename);
+/// Load a vessel from file and place it somewhere on the planet
+EVDS_OBJECT* FWAS_Vessel_LoadAndPlace(FWAS* simulator, EVDS_GEODETIC_COORDINATE* location, char* filename);
+/// Set active vessel
+void FWAS_Vessel_SetActive(FWAS* simulator, EVDS_OBJECT* vessel);
+
 
 ////////////////////////////////////////////////////////////////////////////////
 

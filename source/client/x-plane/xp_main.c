@@ -15,6 +15,9 @@
 /// Local state of the currently active vessel (overrides X-Plane camera)
 ////////////////////////////////////////////////////////////////////////////////
 FWAS* simulator;
+EVDS_OBJECT* homebase;
+EVDS_OBJECT* earth;
+
 XPLMDataRef dataref_paused;
 XPLMDataRef dataref_x;
 XPLMDataRef dataref_y;
@@ -42,6 +45,20 @@ void log_write(char* text, ...) {
 }
 
 
+////////////////////////////////////////////////////////////////////////////////
+/// FWAS logging callback
+////////////////////////////////////////////////////////////////////////////////
+void FWAS_Log(int level, char* message, ...) {
+	char buf[ARBITRARY_MAX] = { 0 };
+	va_list args;
+
+	va_start(args, message);
+	vsnprintf(buf,ARBITRARY_MAX-1,message,args);
+	XPLMDebugString(buf);
+	va_end(args);
+}
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -54,43 +71,7 @@ int XPluginDrawCallback(XPLMDrawingPhase phase, int isBefore, void* refcon) {
 	switch (phase) {
 		case xplm_Phase_Airplanes:
 			XPLMSetGraphicsState(0,0,1,0,0,1,1);
-			glPushMatrix();
-			glTranslatef(XPLMGetDataf(dataref_x),XPLMGetDataf(dataref_y),XPLMGetDataf(dataref_z));
-			XPFWAS_DrawObject(simulator->test);
-			/*glBegin(GL_QUADS);
-				glColor3f(0.0f,1.0f,0.0f);
-				glVertex3f( dX  , dYZ ,-dYZ );
-				glVertex3f(-0.0f, dYZ ,-dYZ );
-				glVertex3f(-0.0f, dYZ , dYZ );
-				glVertex3f( dX  , dYZ , dYZ );
-				glColor3f(1.0f,0.5f,0.0f);
-				glVertex3f( dX  ,-dYZ , dYZ );
-				glVertex3f(-0.0f,-dYZ , dYZ );
-				glVertex3f(-0.0f,-dYZ ,-dYZ );
-				glVertex3f( dX  ,-dYZ ,-dYZ );
-				glColor3f(1.0f,0.0f,0.0f);
-				glVertex3f( dX  , dYZ , dYZ );
-				glVertex3f(-0.0f, dYZ , dYZ );
-				glVertex3f(-0.0f,-dYZ , dYZ );
-				glVertex3f( dX  ,-dYZ , dYZ );
-				glColor3f(1.0f,1.0f,0.0f);
-				glVertex3f( dX  ,-dYZ ,-dYZ );
-				glVertex3f(-0.0f,-dYZ ,-dYZ );
-				glVertex3f(-0.0f, dYZ ,-dYZ );
-				glVertex3f( dX  , dYZ ,-dYZ );
-				glColor3f(0.0f,0.0f,1.0f);
-				glVertex3f(-0.0f, dYZ , dYZ );
-				glVertex3f(-0.0f, dYZ ,-dYZ );
-				glVertex3f(-0.0f,-dYZ ,-dYZ );
-				glVertex3f(-0.0f,-dYZ , dYZ );
-				glColor3f(1.0f,0.0f,1.0f);
-				glVertex3f( dX  , dYZ ,-dYZ );
-				glVertex3f( dX  , dYZ , dYZ );
-				glVertex3f( dX  ,-dYZ , dYZ );
-				glVertex3f( dX  ,-dYZ ,-dYZ );
-			glEnd();*/
-			glPopMatrix();
-
+			XPFWAS_DrawObject(homebase);
 		case xplm_Phase_Panel:
 		case xplm_Phase_Gauges:
 			return 0; //Override X-Plane aircraft rendering
@@ -106,10 +87,33 @@ int XPluginDrawCallback(XPLMDrawingPhase phase, int isBefore, void* refcon) {
 float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFlightLoop,
 						int counter, void* refcon) {
 	float q[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	EVDS_QUATERNION quaternion;
+	double x,y,z;
 
-	XPLMSetDataf(dataref_x,0.0);
-	XPLMSetDataf(dataref_y,105.0);
-	XPLMSetDataf(dataref_z,0.0);
+	EVDS_GEODETIC_COORDINATE geocoord;
+	EVDS_GEODETIC_DATUM datum;
+	EVDS_STATE_VECTOR vector;
+	EVDS_OBJECT* vessel = homebase;
+	if (simulator->active_vessel) {
+		vessel = simulator->active_vessel;
+	}
+
+	//Get location of the vessel in geographic coordinates
+	EVDS_Object_GetStateVector(vessel,&vector);
+	EVDS_Geodetic_DatumFromObject(&datum,earth);
+	EVDS_Geodetic_FromVector(&geocoord,&vector.position,&datum);
+
+	//Mimic state of the active vessel for X-Plane camera
+	XPLMWorldToLocal(geocoord.latitude,geocoord.longitude,geocoord.elevation,&x,&y,&z);
+	EVDS_LVLH_QuaternionToLVLH(&quaternion,&vector.orientation,&geocoord);
+	//q[0] = (float)quaternion.q[0];
+	//q[1] = (float)quaternion.q[1];
+	//q[2] = (float)quaternion.q[2];
+	//q[3] = (float)quaternion.q[3];
+
+	XPLMSetDataf(dataref_x,x);
+	XPLMSetDataf(dataref_y,y);
+	XPLMSetDataf(dataref_z,z);
 	XPLMSetDataf(dataref_vx,0.0);
 	XPLMSetDataf(dataref_vy,0.0);
 	XPLMSetDataf(dataref_vz,0.0);
@@ -152,8 +156,23 @@ PLUGIN_API int XPluginStart(char* outName, char* outSig, char* outDesc) {
 /// Plugin initialization
 ////////////////////////////////////////////////////////////////////////////////
 PLUGIN_API int XPluginEnable(void) {
+	EVDS_GEODETIC_COORDINATE location;
+
+	//Initialize simulator
 	FWAS_Initialize(&simulator);
+	FWAS_SetCallback_Log(simulator,FWAS_Log);
 	log_write("FWAS: Client started\n");
+
+	//Set scene matching X-Plane world
+	FWAS_SetScene_EarthMoon(simulator);
+	EVDS_System_GetObjectByName(simulator->system,"Earth",0,&earth);
+
+	//Add home base
+	EVDS_Geodetic_Set(&location,earth, 45.920178, 63.343250, 119.0);
+	homebase = FWAS_Vessel_LoadAndPlace(simulator,&location,"./Resources/plugins/fwas_x-plane/launchpad.evds");
+
+	//FWAS_Vessel_SetActive(simulator,
+		//FWAS_Vessel_Load(simulator,"./Resources/plugins/fwas_x-plane/rv505.evds"));
 
 	//Register callbacks
 	XPLMRegisterFlightLoopCallback(XPluginFlightLoop, -1, NULL);

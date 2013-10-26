@@ -13,7 +13,7 @@
 /// Draw a mesh in 3D world
 ////////////////////////////////////////////////////////////////////////////////
 void XPFWAS_DrawMesh(EVDS_MESH* mesh) {
-	int i,v;
+	//int i,v;
 
 	glVertexPointer(3, GL_FLOAT, 0, mesh->vertices);
 	glNormalPointer(GL_FLOAT, 0, mesh->normals);
@@ -56,9 +56,20 @@ void XPFWAS_DrawObject(EVDS_OBJECT* object) {
 	//Enter local transformation
 	glPushMatrix();
 
-	//Transform to current vessels coordinates
+	//Transform to current vessels coordinates or planetary coordinates
 	EVDS_Object_GetStateVector(object,&vector);
-	glTranslatef((float)vector.position.x,(float)vector.position.y,(float)vector.position.z);
+	if (vector.position.coordinate_system == earth) {
+		double x,y,z;
+		EVDS_GEODETIC_COORDINATE geocoord;
+		EVDS_Geodetic_FromVector(&geocoord,&vector.position,0);
+		XPLMWorldToLocal(geocoord.latitude,geocoord.longitude,geocoord.elevation,&x,&y,&z);
+		glTranslatef((float)x,(float)y,(float)z);
+		glRotatef( 90.0f, 0,1,0);
+		glRotatef(180.0f, 0,1,0);
+		glRotatef(-90.0f, 1,0,0);
+	} else {
+		glTranslatef((float)vector.position.x,(float)vector.position.y,(float)vector.position.z);
+	}
 
 	//Get quaternion and convert it to OpenGL
 	EVDS_Quaternion_ToMatrix(&vector.orientation,Qmatrix);
