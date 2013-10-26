@@ -36,7 +36,7 @@ int FWAS_EVDS_Callback_PostInitialize(EVDS_SYSTEM* system, EVDS_SOLVER* solver, 
 	memset(userdata,0,sizeof(FWAS_EVDS_USERDATA));
 
 	//Generate mesh for the object
-	EVDS_Mesh_Generate(object,&userdata->mesh,0.1f,0);
+	EVDS_Mesh_Generate(object,&userdata->mesh,0.05f,0);//025
 
 	//Set as userdata
 	EVDS_Object_SetUserdata(object,userdata);
@@ -61,6 +61,7 @@ int FWAS_Initialize(FWAS** p_simulator) {
 	//Initialize EVDS
 	EVDS_System_Create(&simulator->system);
 	EVDS_Common_Register(simulator->system);
+	EVDS_Train_WheelsGeometry_Register(simulator->system);
 
 	//Set proper callbacks
 	callbacks.OnInitialize = 0;
@@ -69,8 +70,9 @@ int FWAS_Initialize(FWAS** p_simulator) {
 	EVDS_System_SetGlobalCallbacks(simulator->system,&callbacks);
 
 	EVDS_System_GetRootInertialSpace(simulator->system,&root);	
-	EVDS_Object_LoadFromFile(root,"./Resources/plugins/fwas_x-plane/testvehicle.evds",&simulator->test);
+	EVDS_Object_LoadFromFile(root,"./Resources/plugins/fwas_x-plane/testvehicle3.evds",&simulator->test);
 	EVDS_Object_Initialize(simulator->test,1);
+	EVDS_Object_SaveToFile(simulator->test,"./Resources/plugins/fwas_x-plane/testvehicle3_init.evds");
 	return 1;
 
 }

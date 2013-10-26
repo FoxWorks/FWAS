@@ -30,6 +30,7 @@ extern "C" {
 
 // External Vessel Dynamics Simulator
 #include "evds.h"
+#include "evds_train_wheels.h"
 // Internal Vessel Systems Simulator
 //#include "ivss.h"
 // Realtime Digital Radio Simulator

@@ -6,7 +6,6 @@
 	ProjectGUID="{F79599D0-3591-C346-A926-822445264228}"
 	RootNamespace="fwas_x-plane"
 	Keyword="Win32Proj"
-	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -51,8 +50,8 @@
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				WarningLevel="3"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				DebugInformationFormat="4"
 				CompileAs="1"
 			/>
@@ -74,6 +73,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\external\xpsdk201\Libraries\Win"
 				GenerateDebugInformation="true"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				SubSystem="2"
 				ImportLibrary="..\..\debug\win.imp"
 				TargetMachine="1"
@@ -95,6 +95,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -133,8 +136,8 @@
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				WarningLevel="3"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -156,6 +159,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\external\xpsdk212\Libraries\Win"
 				GenerateDebugInformation="true"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				SubSystem="2"
 				ImportLibrary="..\..\debug\win.imp"
 				TargetMachine="17"
@@ -177,6 +181,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -213,8 +220,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				WarningLevel="3"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -236,6 +243,7 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\external\xpsdk201\Libraries\Win"
 				GenerateDebugInformation="true"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -259,6 +267,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -296,8 +307,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				WarningLevel="3"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -319,6 +330,7 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\external\xpsdk212\Libraries\Win"
 				GenerateDebugInformation="true"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -342,6 +354,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -379,8 +394,8 @@
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				WarningLevel="3"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				DebugInformationFormat="4"
 				CompileAs="1"
 			/>
@@ -402,6 +417,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\external\xpsdk201\Libraries\Win"
 				GenerateDebugInformation="true"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				SubSystem="2"
 				ImportLibrary="..\..\debug\win.imp"
 				TargetMachine="1"
@@ -423,6 +439,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -461,8 +480,8 @@
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				WarningLevel="3"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -484,6 +503,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\external\xpsdk212\Libraries\Win"
 				GenerateDebugInformation="true"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				SubSystem="2"
 				ImportLibrary="..\..\debug\win.imp"
 				TargetMachine="17"
@@ -505,6 +525,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -541,8 +564,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				WarningLevel="3"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -564,6 +587,7 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\external\xpsdk201\Libraries\Win"
 				GenerateDebugInformation="true"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -587,6 +611,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -624,8 +651,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				WarningLevel="3"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -647,6 +674,7 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\external\xpsdk212\Libraries\Win"
 				GenerateDebugInformation="true"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -670,6 +698,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -707,8 +738,8 @@
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				WarningLevel="3"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				DebugInformationFormat="4"
 				CompileAs="1"
 			/>
@@ -730,6 +761,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\external\xpsdk201\Libraries\Win"
 				GenerateDebugInformation="true"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				SubSystem="2"
 				ImportLibrary="..\..\debug\win.imp"
 				TargetMachine="1"
@@ -751,6 +783,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -789,8 +824,8 @@
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				WarningLevel="3"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -812,6 +847,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\external\xpsdk212\Libraries\Win"
 				GenerateDebugInformation="true"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				SubSystem="2"
 				ImportLibrary="..\..\debug\win.imp"
 				TargetMachine="17"
@@ -833,6 +869,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -869,8 +908,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				WarningLevel="3"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -892,6 +931,7 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\external\xpsdk201\Libraries\Win"
 				GenerateDebugInformation="true"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -915,6 +955,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -952,8 +995,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				WarningLevel="3"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -975,6 +1018,7 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\external\xpsdk212\Libraries\Win"
 				GenerateDebugInformation="true"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -998,6 +1042,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -1035,8 +1082,8 @@
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				WarningLevel="3"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				DebugInformationFormat="4"
 				CompileAs="1"
 			/>
@@ -1058,6 +1105,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\external\xpsdk201\Libraries\Win"
 				GenerateDebugInformation="true"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				SubSystem="2"
 				ImportLibrary="..\..\debug\win.imp"
 				TargetMachine="1"
@@ -1079,6 +1127,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -1117,8 +1168,8 @@
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				WarningLevel="3"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -1140,6 +1191,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\external\xpsdk212\Libraries\Win"
 				GenerateDebugInformation="true"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				SubSystem="2"
 				ImportLibrary="..\..\debug\win.imp"
 				TargetMachine="17"
@@ -1161,6 +1213,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -1197,8 +1252,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				WarningLevel="3"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -1220,6 +1275,7 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\external\xpsdk201\Libraries\Win"
 				GenerateDebugInformation="true"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -1243,6 +1299,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -1280,8 +1339,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				WarningLevel="3"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -1303,6 +1362,7 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\external\xpsdk212\Libraries\Win"
 				GenerateDebugInformation="true"
+				ProgramDataBaseFileName="$(OutDir)\win.pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -1328,6 +1388,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -1337,9 +1400,11 @@
 	<Files>
 		<Filter
 			Name="client"
+			Filter=""
 			>
 			<Filter
 				Name="x-plane"
+				Filter=""
 				>
 				<File
 					RelativePath="..\..\source\client\x-plane\xp_fwas.h"

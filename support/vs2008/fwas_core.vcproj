@@ -1271,6 +1271,19 @@
 	</References>
 	<Files>
 		<Filter
+			Name="addons"
+			Filter=""
+			>
+			<File
+				RelativePath="..\..\external\evds\addons\evds_train_wheels.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\external\evds\addons\evds_train_wheels.h"
+				>
+			</File>
+		</Filter>
+		<Filter
 			Name="core"
 			Filter=""
 			>

@@ -35,8 +35,8 @@ project "fwas_core"
 
 --     "../external/evds/addons/evds_antenna.c",
 --     "../external/evds/addons/evds_antenna.h",
---     "../external/evds/addons/evds_train_wheels.c",
---     "../external/evds/addons/evds_train_wheels.h",
+     "../external/evds/addons/evds_train_wheels.c",
+     "../external/evds/addons/evds_train_wheels.h",
 --     "../external/evds/addons/evds_nrlmsise-00.c",
 --     "../external/evds/addons/evds_nrlmsise-00.h",
 --     "../external/nrlmsise-00/nrlmsise-00.c",

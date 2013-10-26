@@ -108,7 +108,7 @@ float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFl
 	float q[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 	XPLMSetDataf(dataref_x,0.0);
-	XPLMSetDataf(dataref_y,1000.0);
+	XPLMSetDataf(dataref_y,105.0);
 	XPLMSetDataf(dataref_z,0.0);
 	XPLMSetDataf(dataref_vx,0.0);
 	XPLMSetDataf(dataref_vy,0.0);
