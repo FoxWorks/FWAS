@@ -46,7 +46,7 @@ void XPFWAS_DrawMesh(EVDS_MESH* mesh) {
 ////////////////////////////////////////////////////////////////////////////////
 void XPFWAS_DrawObject(EVDS_OBJECT* object) {
 	FWAS_EVDS_USERDATA* userdata;
-	int i,j;
+	int i,j,lod;
 	float opengl_matrix[16];
 	EVDS_MATRIX Qmatrix;
 	EVDS_STATE_VECTOR vector;
@@ -80,10 +80,17 @@ void XPFWAS_DrawObject(EVDS_OBJECT* object) {
 	}
 	glMultMatrixf(opengl_matrix);
 
-	//Draw mesh
+	//Render objects mesh data
 	EVDS_Object_GetUserdata(object,&userdata);
 	if (userdata) {
-		XPFWAS_DrawMesh(userdata->mesh);
+		//Get bounding box of the object
+		lod = FWAS_LOD_LEVELS;
+		if (userdata->lod_count > 0) {
+			XPFWAS_DrawMesh(userdata->mesh[userdata->lod_count-1]);
+		}
+
+		//Draw mesh
+		//XPFWAS_DrawMesh(userdata->mesh);
 	}
 
 	//Draw children

@@ -54,6 +54,10 @@ typedef void FWAS_Callback_Log(int level, char* message, ...);
 #define FWAS_MESSAGE_ERROR		2
 
 
+/// Number of LODs for the object meshes
+#define FWAS_LOD_LEVELS			6
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +75,8 @@ typedef struct FWAS_TAG {
 ////////////////////////////////////////////////////////////////////////////////
 typedef struct FWAS_EVDS_USERDATA_TAG {
 	EVDS_OBJECT* object;
-	EVDS_MESH* mesh;
+	EVDS_MESH* mesh[FWAS_LOD_LEVELS];
+	int lod_count;
 } FWAS_EVDS_USERDATA;
 
 

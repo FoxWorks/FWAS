@@ -31,16 +31,56 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// Initialize object
 ////////////////////////////////////////////////////////////////////////////////
+SIMC_LOCK_ID FWAS_EVDS_MeshGenerate_ThreadsRunningLock = SIMC_THREAD_BAD_ID;
+int FWAS_EVDS_MeshGenerate_ThreadsRunning = 0;
+
+extern void FWAS_Log(int level, char* message, ...);
+void FWAS_EVDS_MeshGenerate_Thread(FWAS_EVDS_USERDATA* userdata) {
+	int lod;
+
+	SIMC_Thread_Sleep(30.0f);
+
+	//Wait until number of thread falls down
+	while (1) {
+		int thread_count;
+		SIMC_Lock_Enter(FWAS_EVDS_MeshGenerate_ThreadsRunningLock);
+
+		if (FWAS_EVDS_MeshGenerate_ThreadsRunning < SIMC_Thread_GetNumProcessors()) {
+			FWAS_EVDS_MeshGenerate_ThreadsRunning++;
+			SIMC_Lock_Leave(FWAS_EVDS_MeshGenerate_ThreadsRunningLock);
+			break;
+		}
+
+		SIMC_Lock_Leave(FWAS_EVDS_MeshGenerate_ThreadsRunningLock);
+		SIMC_Thread_Sleep(0.0f);
+	}
+
+	//Generate mesh for the object
+	for (lod = 0; lod < FWAS_LOD_LEVELS; lod++) { //Generate LODs from the last
+		float resolution = 0.05f * powf(2.0f,FWAS_LOD_LEVELS-lod-1);
+
+		EVDS_Mesh_Generate(userdata->object,&userdata->mesh[lod],resolution,0);
+		//SIMC_Thread_Sleep(1.0f);
+		userdata->lod_count++; //Signal that LOD is present
+	}	
+
+	//Remove a thread
+	SIMC_Lock_Enter(FWAS_EVDS_MeshGenerate_ThreadsRunningLock);
+		FWAS_EVDS_MeshGenerate_ThreadsRunning--;
+	SIMC_Lock_Leave(FWAS_EVDS_MeshGenerate_ThreadsRunningLock);
+}
+
 int FWAS_EVDS_Callback_PostInitialize(EVDS_SYSTEM* system, EVDS_SOLVER* solver, EVDS_OBJECT* object) {
 	FWAS_EVDS_USERDATA* userdata = malloc(sizeof(FWAS_EVDS_USERDATA));
 	memset(userdata,0,sizeof(FWAS_EVDS_USERDATA));
 
-	//Generate mesh for the object
+	//Set as userdata (so renderer can start using the object right away)
 	userdata->object = object;
-	EVDS_Mesh_Generate(object,&userdata->mesh,0.05f,0);//025
-
-	//Set as userdata
+	userdata->lod_count = 0;
 	EVDS_Object_SetUserdata(object,userdata);
+
+	//Start thread to generate meshes
+	SIMC_Thread_Create(FWAS_EVDS_MeshGenerate_Thread,userdata);
 	return EVDS_OK;
 }
 
@@ -51,6 +91,11 @@ int FWAS_EVDS_Callback_PostInitialize(EVDS_SYSTEM* system, EVDS_SOLVER* solver, 
 int FWAS_Initialize(FWAS** p_simulator) {
 	FWAS* simulator;
 	EVDS_GLOBAL_CALLBACKS callbacks = { 0 };
+
+	//Create global locks
+	if (!FWAS_EVDS_MeshGenerate_ThreadsRunningLock) {
+		FWAS_EVDS_MeshGenerate_ThreadsRunningLock = SIMC_Lock_Create();
+	}
 
 	//Create new simulator
 	simulator = malloc(sizeof(FWAS));
@@ -132,7 +177,7 @@ EVDS_OBJECT* FWAS_Vessel_LoadFromFile(FWAS* simulator, EVDS_OBJECT* parent, char
 
 	//Load the vessel
 	EVDS_Object_LoadFromFile(parent,filename,&vessel);
-	EVDS_Object_Initialize(vessel,1);
+	EVDS_Object_Initialize(vessel,0);
 	return vessel;
 }
 

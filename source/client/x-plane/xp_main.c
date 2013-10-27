@@ -7,6 +7,9 @@
 #include <stdio.h>
 
 #include "xp_fwas.h"
+#ifdef _WIN32
+#	include "windows.h"
+#endif
 
 
 
@@ -32,21 +35,7 @@ XPLMDataRef dataref_q;
 
 
 ////////////////////////////////////////////////////////////////////////////////
-/// Log something to X-Plane's Log.txt
-////////////////////////////////////////////////////////////////////////////////
-void log_write(char* text, ...) {
-	char buf[ARBITRARY_MAX] = { 0 };
-	va_list args;
-
-	va_start(args, text);
-	vsnprintf(buf,ARBITRARY_MAX-1,text,args);
-	XPLMDebugString(buf);
-	va_end(args);
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-/// FWAS logging callback
+/// FWAS logging callback (writes to X-Plane log.txt)
 ////////////////////////////////////////////////////////////////////////////////
 void FWAS_Log(int level, char* message, ...) {
 	char buf[ARBITRARY_MAX] = { 0 };
@@ -56,6 +45,10 @@ void FWAS_Log(int level, char* message, ...) {
 	vsnprintf(buf,ARBITRARY_MAX-1,message,args);
 	XPLMDebugString(buf);
 	va_end(args);
+#ifdef _WIN32
+	strncat(buf,"\n",ARBITRARY_MAX);
+	OutputDebugString(buf);
+#endif
 }
 
 
@@ -74,7 +67,7 @@ int XPluginDrawCallback(XPLMDrawingPhase phase, int isBefore, void* refcon) {
 			XPFWAS_DrawObject(homebase);
 		case xplm_Phase_Panel:
 		case xplm_Phase_Gauges:
-			return 0; //Override X-Plane aircraft rendering
+			return 1; //Override X-Plane aircraft rendering
 		default:
 			return 1;
 	}
@@ -111,6 +104,7 @@ float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFl
 	//q[2] = (float)quaternion.q[2];
 	//q[3] = (float)quaternion.q[3];
 
+	if (counter % 50 < 25) {
 	XPLMSetDatad(dataref_x,x);
 	XPLMSetDatad(dataref_y,y);
 	XPLMSetDatad(dataref_z,z);
@@ -121,6 +115,7 @@ float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFl
 	XPLMSetDataf(dataref_Q,0.0);
 	XPLMSetDataf(dataref_R,0.0);
 	XPLMSetDatavf(dataref_q,q,0,4);
+	}
 	return -1;
 }
 
@@ -147,7 +142,7 @@ PLUGIN_API int XPluginStart(char* outName, char* outSig, char* outDesc) {
 	dataref_q  = XPLMFindDataRef("sim/flightmodel/position/q");
 
 	//Finish initializing
-	XPLMDebugString("FWAS: Client initialized\n");
+	FWAS_Log(FWAS_MESSAGE_INFO,"FWAS-XP: Client initialized\n");
 	return 1;
 }
 
@@ -159,7 +154,7 @@ PLUGIN_API int XPluginEnable(void) {
 	//Initialize simulator
 	FWAS_Initialize(&simulator);
 	FWAS_SetCallback_Log(simulator,FWAS_Log);
-	log_write("FWAS: Client started\n");
+	FWAS_Log(FWAS_MESSAGE_INFO,"FWAS-XP: Client started\n");
 
 	//Set scene matching X-Plane world
 	FWAS_LoadScene_EarthMoon(simulator);
@@ -179,6 +174,10 @@ PLUGIN_API int XPluginEnable(void) {
 	XPLMRegisterDrawCallback(XPluginDrawCallback, xplm_Phase_Panel,			1, NULL);
 	XPLMRegisterDrawCallback(XPluginDrawCallback, xplm_Phase_Gauges,		0, NULL);
 	XPLMRegisterDrawCallback(XPluginDrawCallback, xplm_Phase_Gauges,		1, NULL);
+
+	//Disable motion of players plane
+	XPLMDisableAIForPlane(0);
+	XPLMSetActiveAircraftCount(1);
 	return 1;
 }
 
@@ -188,7 +187,7 @@ PLUGIN_API int XPluginEnable(void) {
 ////////////////////////////////////////////////////////////////////////////////
 PLUGIN_API void XPluginDisable(void) {
 	FWAS_Deinitialize(simulator);
-	log_write("FWAS: Client stopped\n");
+	FWAS_Log(FWAS_MESSAGE_INFO,"FWAS-XP: Client stopped\n");
 
 	//Unregister callbacks
 	XPLMUnregisterFlightLoopCallback(XPluginFlightLoop, NULL);
