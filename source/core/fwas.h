@@ -64,8 +64,10 @@ typedef void FWAS_Callback_Log(int level, char* message, ...);
 /// @brief FoxWorks Aerospace Simulator state
 ////////////////////////////////////////////////////////////////////////////////
 typedef struct FWAS_TAG {
-	EVDS_SYSTEM* system;
-	EVDS_OBJECT* active_vessel;
+	EVDS_SYSTEM* system;			///< EVDS system
+	EVDS_OBJECT* active_vessel;		///< Currently actively selected vessel
+
+	//List of callbacks
 	FWAS_Callback_Log* log;
 } FWAS;
 
@@ -89,9 +91,6 @@ typedef struct FWAS_EVDS_USERDATA_TAG {
 int FWAS_Initialize(FWAS** p_simulator);
 /// Deinitialize simulator
 void FWAS_Deinitialize(FWAS* simulator);
-
-/// Set logging callback
-void FWAS_SetCallback_Log(FWAS* simulator, FWAS_Callback_Log* onLog);
 
 
 ////////////////////////////////////////////////////////////////////////////////

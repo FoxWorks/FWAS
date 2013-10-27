@@ -153,7 +153,9 @@ PLUGIN_API int XPluginStart(char* outName, char* outSig, char* outDesc) {
 PLUGIN_API int XPluginEnable(void) {
 	//Initialize simulator
 	FWAS_Initialize(&simulator);
-	FWAS_SetCallback_Log(simulator,XPFWAS_Log);
+
+	//Setup callbacks
+	simulator->log = XPFWAS_Log;
 	XPFWAS_Log(FWAS_MESSAGE_INFO,"FWAS-XP: Client started\n");
 
 	//Set scene matching X-Plane world

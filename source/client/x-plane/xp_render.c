@@ -37,7 +37,7 @@ void XPFWAS_ProjectXYZ(float x, float y, float z, float* u, float* v) {
 /// Draw a mesh in 3D world
 ////////////////////////////////////////////////////////////////////////////////
 void XPFWAS_DrawMesh(EVDS_MESH* mesh) {
-	/*glVertexPointer(3, GL_FLOAT, 0, mesh->vertices);
+	glVertexPointer(3, GL_FLOAT, 0, mesh->vertices);
 	glNormalPointer(GL_FLOAT, 0, mesh->normals);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
@@ -47,9 +47,9 @@ void XPFWAS_DrawMesh(EVDS_MESH* mesh) {
 	glEnable(GL_CULL_FACE);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);*/
+	glDisableClientState(GL_NORMAL_ARRAY);
 
-	int i,v;
+	/*int i,v;
 	glBegin(GL_LINES);
 	for (i = 0; i < mesh->num_triangles; i++) {
 		EVDS_MESH_TRIANGLE* triangle = &mesh->triangles[i];
@@ -60,7 +60,7 @@ void XPFWAS_DrawMesh(EVDS_MESH* mesh) {
 			glVertex3f(triangle->vertex[(v+1)%3].x,triangle->vertex[(v+1)%3].y,triangle->vertex[(v+1)%3].z);
 		}
 	}
-	glEnd();
+	glEnd();*/
 }
 
 
@@ -135,7 +135,7 @@ void XPFWAS_DrawObject(EVDS_OBJECT* object) {
 		visual_size = sqrtf(visual_size);
 
 		//Compute LOD level
-		lod = (int)(FWAS_LOD_LEVELS*visual_size*2.0f); //>1/2th of screen -> full LOD
+		lod = (int)(FWAS_LOD_LEVELS*visual_size*1.5f);
 		if (lod < 0) lod = 0;
 		if (lod > FWAS_LOD_LEVELS-1) lod = FWAS_LOD_LEVELS-1;
 		if (lod > userdata->lod_count-1) lod = userdata->lod_count-1;

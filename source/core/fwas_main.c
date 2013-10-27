@@ -52,7 +52,7 @@ void FWAS_EVDS_MeshGenerate_Thread(FWAS_EVDS_USERDATA* userdata) {
 
 	//Generate mesh for the object
 	for (lod = 1; lod < FWAS_LOD_LEVELS; lod++) { //Generate LODs from the last
-		float resolution = 0.05f * powf(2.0f,FWAS_LOD_LEVELS-lod-1);
+		float resolution = 0.15f * powf(2.0f,FWAS_LOD_LEVELS-lod-1);
 
 		EVDS_Mesh_Generate(userdata->object,&userdata->mesh[lod],resolution,0);
 		userdata->lod_count++; //Signal that LOD is present
@@ -115,14 +115,6 @@ int FWAS_Initialize(FWAS** p_simulator) {
 	callbacks.OnDeinitialize = 0;
 	EVDS_System_SetGlobalCallbacks(simulator->system,&callbacks);
 	return 1;
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-/// Set logging callback
-////////////////////////////////////////////////////////////////////////////////
-void FWAS_SetCallback_Log(FWAS* simulator, FWAS_Callback_Log* onLog) {
-	simulator->log = onLog;
 }
 
 
