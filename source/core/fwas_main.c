@@ -29,20 +29,15 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////
-/// Initialize object
+/// Thread that generates LOD meshes
 ////////////////////////////////////////////////////////////////////////////////
 SIMC_LOCK_ID FWAS_EVDS_MeshGenerate_ThreadsRunningLock = SIMC_THREAD_BAD_ID;
 int FWAS_EVDS_MeshGenerate_ThreadsRunning = 0;
-
-extern void FWAS_Log(int level, char* message, ...);
 void FWAS_EVDS_MeshGenerate_Thread(FWAS_EVDS_USERDATA* userdata) {
 	int lod;
 
-	SIMC_Thread_Sleep(30.0f);
-
 	//Wait until number of thread falls down
 	while (1) {
-		int thread_count;
 		SIMC_Lock_Enter(FWAS_EVDS_MeshGenerate_ThreadsRunningLock);
 
 		if (FWAS_EVDS_MeshGenerate_ThreadsRunning < SIMC_Thread_GetNumProcessors()) {
@@ -56,11 +51,10 @@ void FWAS_EVDS_MeshGenerate_Thread(FWAS_EVDS_USERDATA* userdata) {
 	}
 
 	//Generate mesh for the object
-	for (lod = 0; lod < FWAS_LOD_LEVELS; lod++) { //Generate LODs from the last
+	for (lod = 1; lod < FWAS_LOD_LEVELS; lod++) { //Generate LODs from the last
 		float resolution = 0.05f * powf(2.0f,FWAS_LOD_LEVELS-lod-1);
 
 		EVDS_Mesh_Generate(userdata->object,&userdata->mesh[lod],resolution,0);
-		//SIMC_Thread_Sleep(1.0f);
 		userdata->lod_count++; //Signal that LOD is present
 	}	
 
@@ -70,13 +64,20 @@ void FWAS_EVDS_MeshGenerate_Thread(FWAS_EVDS_USERDATA* userdata) {
 	SIMC_Lock_Leave(FWAS_EVDS_MeshGenerate_ThreadsRunningLock);
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+/// Perform post-initialization for the object
+////////////////////////////////////////////////////////////////////////////////
 int FWAS_EVDS_Callback_PostInitialize(EVDS_SYSTEM* system, EVDS_SOLVER* solver, EVDS_OBJECT* object) {
 	FWAS_EVDS_USERDATA* userdata = malloc(sizeof(FWAS_EVDS_USERDATA));
 	memset(userdata,0,sizeof(FWAS_EVDS_USERDATA));
 
+	//Generate initial mesh (zero-level LOD)
+	EVDS_Mesh_Generate(object,&userdata->mesh[0],EVDS_MESH_LOWEST_RESOLUTION,0);
+	userdata->lod_count = 1;
+
 	//Set as userdata (so renderer can start using the object right away)
 	userdata->object = object;
-	userdata->lod_count = 0;
 	EVDS_Object_SetUserdata(object,userdata);
 
 	//Start thread to generate meshes

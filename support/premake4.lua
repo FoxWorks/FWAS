@@ -78,8 +78,8 @@ project "fwas_x-plane"
      "../source/core",
    }
    files {
-     "../source/client/x-plane/xp_*.c",
-     "../source/client/x-plane/xp_*.h",
+     "../source/client/x-plane/**.c",
+     "../source/client/x-plane/**.h",
    }
    links { "fwas_core","evds","simc" } --"rdrs","ivss"
    

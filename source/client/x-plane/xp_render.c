@@ -7,15 +7,37 @@
 #include <stdio.h>
 
 #include "xp_fwas.h"
+#include "xp_matrix.h"
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// Project 3D point onto screen
+////////////////////////////////////////////////////////////////////////////////
+void XPFWAS_ProjectXYZ(float x, float y, float z, float* u, float* v) {
+	float view[16], proj[16], viewProj[16];
+	float in[4],out[4];
+	glGetFloatv(GL_MODELVIEW_MATRIX,  view);
+	glGetFloatv(GL_PROJECTION_MATRIX, proj);
+
+	in[0] = x;
+	in[1] = y;
+	in[2] = z;
+	in[3] = 1.0f;
+	mult_matrix(viewProj,view,proj);
+	transform_vector(out,viewProj,in);
+
+	*u = out[0];
+	*v = out[1];
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Draw a mesh in 3D world
 ////////////////////////////////////////////////////////////////////////////////
 void XPFWAS_DrawMesh(EVDS_MESH* mesh) {
-	//int i,v;
-
-	glVertexPointer(3, GL_FLOAT, 0, mesh->vertices);
+	/*glVertexPointer(3, GL_FLOAT, 0, mesh->vertices);
 	glNormalPointer(GL_FLOAT, 0, mesh->normals);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
@@ -25,9 +47,10 @@ void XPFWAS_DrawMesh(EVDS_MESH* mesh) {
 	glEnable(GL_CULL_FACE);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);*/
 
-	/*glBegin(GL_LINES);
+	int i,v;
+	glBegin(GL_LINES);
 	for (i = 0; i < mesh->num_triangles; i++) {
 		EVDS_MESH_TRIANGLE* triangle = &mesh->triangles[i];
 		if (triangle->thickness == 0.0) continue;
@@ -37,7 +60,7 @@ void XPFWAS_DrawMesh(EVDS_MESH* mesh) {
 			glVertex3f(triangle->vertex[(v+1)%3].x,triangle->vertex[(v+1)%3].y,triangle->vertex[(v+1)%3].z);
 		}
 	}
-	glEnd();*/
+	glEnd();
 }
 
 
@@ -82,15 +105,43 @@ void XPFWAS_DrawObject(EVDS_OBJECT* object) {
 
 	//Render objects mesh data
 	EVDS_Object_GetUserdata(object,&userdata);
-	if (userdata) {
-		//Get bounding box of the object
-		lod = FWAS_LOD_LEVELS;
-		if (userdata->lod_count > 0) {
-			XPFWAS_DrawMesh(userdata->mesh[userdata->lod_count-1]);
-		}
+	if (userdata && (userdata->lod_count > 0)) {
+		int i,j;
+		float visual_size;
+		struct { float x,y; } vertices[8];
+		EVDS_MESH* mesh = userdata->mesh[0];
 
-		//Draw mesh
-		//XPFWAS_DrawMesh(userdata->mesh);
+		//Get bounding box of the object
+		XPFWAS_ProjectXYZ(mesh->bbox_min.x,mesh->bbox_min.y,mesh->bbox_min.z,&vertices[0].x,&vertices[0].y);
+		XPFWAS_ProjectXYZ(mesh->bbox_max.x,mesh->bbox_min.y,mesh->bbox_min.z,&vertices[1].x,&vertices[1].y);
+		XPFWAS_ProjectXYZ(mesh->bbox_min.x,mesh->bbox_max.y,mesh->bbox_min.z,&vertices[2].x,&vertices[2].y);
+		XPFWAS_ProjectXYZ(mesh->bbox_max.x,mesh->bbox_max.y,mesh->bbox_min.z,&vertices[3].x,&vertices[3].y);
+
+		XPFWAS_ProjectXYZ(mesh->bbox_min.x,mesh->bbox_min.y,mesh->bbox_max.z,&vertices[4].x,&vertices[4].y);
+		XPFWAS_ProjectXYZ(mesh->bbox_max.x,mesh->bbox_min.y,mesh->bbox_max.z,&vertices[5].x,&vertices[5].y);
+		XPFWAS_ProjectXYZ(mesh->bbox_min.x,mesh->bbox_max.y,mesh->bbox_max.z,&vertices[6].x,&vertices[6].y);
+		XPFWAS_ProjectXYZ(mesh->bbox_max.x,mesh->bbox_max.y,mesh->bbox_max.z,&vertices[7].x,&vertices[7].y);
+
+		//Compute furthest distance between any two points
+		visual_size = 0.0;
+		for (i=0;i<8;i++) {
+			for (j=i;j<8;j++) {
+				float distance = 
+					(vertices[i].x-vertices[j].x)*(vertices[i].x-vertices[j].x)+
+					(vertices[i].y-vertices[j].y)*(vertices[i].y-vertices[j].y);
+				if (distance > visual_size) visual_size = distance;
+			}
+		}
+		visual_size = sqrtf(visual_size);
+
+		//Compute LOD level
+		lod = (int)(FWAS_LOD_LEVELS*visual_size*2.0f); //>1/2th of screen -> full LOD
+		if (lod < 0) lod = 0;
+		if (lod > FWAS_LOD_LEVELS-1) lod = FWAS_LOD_LEVELS-1;
+		if (lod > userdata->lod_count-1) lod = userdata->lod_count-1;
+
+		//Draw mesh with corresponding LOD
+		XPFWAS_DrawMesh(userdata->mesh[lod]);
 	}
 
 	//Draw children

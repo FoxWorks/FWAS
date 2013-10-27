@@ -63,9 +63,11 @@
 #	define snscanf _snscanf
 #endif
 
-// Planet earth
+/// Planet earth
 extern EVDS_OBJECT* earth;
 
+/// Log message
+void XPFWAS_Log(int level, char* message, ...);
 // Draw a single mesh
 void XPFWAS_DrawMesh(EVDS_MESH* mesh);
 // Draw an object

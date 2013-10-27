@@ -37,7 +37,7 @@ XPLMDataRef dataref_q;
 ////////////////////////////////////////////////////////////////////////////////
 /// FWAS logging callback (writes to X-Plane log.txt)
 ////////////////////////////////////////////////////////////////////////////////
-void FWAS_Log(int level, char* message, ...) {
+void XPFWAS_Log(int level, char* message, ...) {
 	char buf[ARBITRARY_MAX] = { 0 };
 	va_list args;
 
@@ -142,7 +142,7 @@ PLUGIN_API int XPluginStart(char* outName, char* outSig, char* outDesc) {
 	dataref_q  = XPLMFindDataRef("sim/flightmodel/position/q");
 
 	//Finish initializing
-	FWAS_Log(FWAS_MESSAGE_INFO,"FWAS-XP: Client initialized\n");
+	XPFWAS_Log(FWAS_MESSAGE_INFO,"FWAS-XP: Client initialized\n");
 	return 1;
 }
 
@@ -153,8 +153,8 @@ PLUGIN_API int XPluginStart(char* outName, char* outSig, char* outDesc) {
 PLUGIN_API int XPluginEnable(void) {
 	//Initialize simulator
 	FWAS_Initialize(&simulator);
-	FWAS_SetCallback_Log(simulator,FWAS_Log);
-	FWAS_Log(FWAS_MESSAGE_INFO,"FWAS-XP: Client started\n");
+	FWAS_SetCallback_Log(simulator,XPFWAS_Log);
+	XPFWAS_Log(FWAS_MESSAGE_INFO,"FWAS-XP: Client started\n");
 
 	//Set scene matching X-Plane world
 	FWAS_LoadScene_EarthMoon(simulator);
@@ -187,7 +187,7 @@ PLUGIN_API int XPluginEnable(void) {
 ////////////////////////////////////////////////////////////////////////////////
 PLUGIN_API void XPluginDisable(void) {
 	FWAS_Deinitialize(simulator);
-	FWAS_Log(FWAS_MESSAGE_INFO,"FWAS-XP: Client stopped\n");
+	XPFWAS_Log(FWAS_MESSAGE_INFO,"FWAS-XP: Client stopped\n");
 
 	//Unregister callbacks
 	XPLMUnregisterFlightLoopCallback(XPluginFlightLoop, NULL);
