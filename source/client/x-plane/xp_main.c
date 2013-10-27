@@ -111,9 +111,9 @@ float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFl
 	//q[2] = (float)quaternion.q[2];
 	//q[3] = (float)quaternion.q[3];
 
-	XPLMSetDataf(dataref_x,x);
-	XPLMSetDataf(dataref_y,y);
-	XPLMSetDataf(dataref_z,z);
+	XPLMSetDatad(dataref_x,x);
+	XPLMSetDatad(dataref_y,y);
+	XPLMSetDatad(dataref_z,z);
 	XPLMSetDataf(dataref_vx,0.0);
 	XPLMSetDataf(dataref_vy,0.0);
 	XPLMSetDataf(dataref_vz,0.0);
@@ -164,7 +164,7 @@ PLUGIN_API int XPluginEnable(void) {
 	log_write("FWAS: Client started\n");
 
 	//Set scene matching X-Plane world
-	FWAS_SetScene_EarthMoon(simulator);
+	FWAS_LoadScene_EarthMoon(simulator);
 	EVDS_System_GetObjectByName(simulator->system,"Earth",0,&earth);
 
 	//Add home base

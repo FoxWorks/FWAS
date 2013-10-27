@@ -89,40 +89,26 @@ void FWAS_Deinitialize(FWAS* simulator) {
 
 
 ////////////////////////////////////////////////////////////////////////////////
-/// Set Earth and Moon simulation scene
+/// Load Earth and Moon simulation scene
 ////////////////////////////////////////////////////////////////////////////////
-void FWAS_SetScene_EarthMoon(FWAS* simulator) {
-	EVDS_OBJECT* inertial_earth;
+void FWAS_LoadScene_EarthMoon(FWAS* simulator) {
+	EVDS_OBJECT* root;
 	EVDS_OBJECT* solar_system;
-	EVDS_OBJECT* planet_earth;
-	//EVDS_OBJECT* planet_earth_moon;
-	simulator->log(FWAS_MESSAGE_INFO,"FWAS_SetScene_EarthMoon: Initialized default scene");
+	simulator->log(FWAS_MESSAGE_INFO,"FWAS_SetScene_EarthMoon: loading default scene");
 
-	//Create solar system inertial space
-	EVDS_Object_Create(simulator->system,0,&solar_system);
-	EVDS_Object_SetName(solar_system,"Solar_Inertial_Space");
-	EVDS_Object_SetType(solar_system,"propagator_rk4");
-	EVDS_Object_Initialize(solar_system,1);
-
-	//Create planet Earth inertial space
-	EVDS_Object_Create(simulator->system,solar_system,&inertial_earth);
-	EVDS_Object_SetName(inertial_earth,"Earth_Inertial_Space");
-	EVDS_Object_SetType(inertial_earth,"propagator_rk4");
-	EVDS_Object_Initialize(inertial_earth,1);
-
-	//Create planet Earth
-	EVDS_Object_Create(simulator->system,inertial_earth,&planet_earth);
-	EVDS_Object_SetType(planet_earth,"planet");
-	EVDS_Object_SetName(planet_earth,"Earth");
-	//EVDS_Object_SetAngularVelocity(planet_earth,inertial_earth,0,0,2*EVDS_PI/86164.0);
-	EVDS_Object_AddRealVariable(planet_earth,"gravity.mu",3.9860044e14,0);		//m3 sec-2
-	EVDS_Object_AddRealVariable(planet_earth,"geometry.radius",6378.145e3,0);	//m
-	EVDS_Object_AddRealVariable(planet_earth,"information.period",86164.10,0);	//sec
-	EVDS_Object_AddRealVariable(planet_earth,"is_static",1,0);					//Planet does not move
-	EVDS_Object_Initialize(planet_earth,1);
+	EVDS_System_GetRootInertialSpace(simulator->system,&root);
+	EVDS_Object_LoadFromString(root,
+"		<object name=\"Earth_Inertial_Space\" type=\"propagator_rk4\">"
+"			<object name=\"Earth\" type=\"planet\">"
+"				<parameter name=\"gravity.mu\">3.9860044e14</parameter>"		//m3 sec-2
+"				<parameter name=\"geometry.radius\">6378.145e3</parameter>"		//m
+"				<parameter name=\"information.period\">86164.10</parameter>"	//sec
+"				<parameter name=\"is_static\">1</parameter>"
+"			</object>"
+"		</object>",&solar_system);
 
 	//Create moon
-	/*EVDS_Object_Create(simulator->system,inertial_earth,&planet_earth_moon);
+	/*EVDS_Object_Create(inertial_earth,&planet_earth_moon);
 	EVDS_Object_SetType(planet_earth_moon,"planet");
 	EVDS_Object_SetName(planet_earth_moon,"Moon");
 	EVDS_Object_AddRealVariable(planet_earth_moon,"mu",0.0490277e14,0);	//m3 sec-2
@@ -136,7 +122,7 @@ void FWAS_SetScene_EarthMoon(FWAS* simulator) {
 ////////////////////////////////////////////////////////////////////////////////
 /// Load a vessel from file
 ////////////////////////////////////////////////////////////////////////////////
-EVDS_OBJECT* FWAS_Vessel_Load(FWAS* simulator, char* filename) {
+EVDS_OBJECT* FWAS_Vessel_LoadFromFile(FWAS* simulator, char* filename) {
 	EVDS_OBJECT *root,*vessel;
 	simulator->log(FWAS_MESSAGE_INFO,"FWAS_Vessel_Load: %s",filename);
 
