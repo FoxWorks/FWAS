@@ -101,13 +101,17 @@ void FWAS_LoadScene_SolarSystem(FWAS* simulator);
 ////////////////////////////////////////////////////////////////////////////////
 /// Vessel and scenery (building) management
 ////////////////////////////////////////////////////////////////////////////////
-/// Load a vessel from file
-EVDS_OBJECT* FWAS_Vessel_LoadFromFile(FWAS* simulator, char* filename);
-/// Load a vessel from file and place it somewhere on the planet
-EVDS_OBJECT* FWAS_Vessel_LoadAndPlace(FWAS* simulator, EVDS_GEODETIC_COORDINATE* location, char* filename);
-
+/// Load vessel(s) from file
+EVDS_OBJECT* FWAS_Vessel_LoadFromFile(FWAS* simulator, EVDS_OBJECT* parent, char* filename);
 /// Set active vessel
 void FWAS_Vessel_SetActive(FWAS* simulator, EVDS_OBJECT* vessel);
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// Planets and solar system management
+////////////////////////////////////////////////////////////////////////////////
+/// Get planet by name
+EVDS_OBJECT* FWAS_Planet_GetByName(FWAS* simulator, char* name);
 
 
 ////////////////////////////////////////////////////////////////////////////////

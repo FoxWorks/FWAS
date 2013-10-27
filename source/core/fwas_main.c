@@ -98,14 +98,16 @@ void FWAS_LoadScene_EarthMoon(FWAS* simulator) {
 
 	EVDS_System_GetRootInertialSpace(simulator->system,&root);
 	EVDS_Object_LoadFromString(root,
-"		<object name=\"Earth_Inertial_Space\" type=\"propagator_rk4\">"
-"			<object name=\"Earth\" type=\"planet\">"
-"				<parameter name=\"gravity.mu\">3.9860044e14</parameter>"		//m3 sec-2
-"				<parameter name=\"geometry.radius\">6378.145e3</parameter>"		//m
-"				<parameter name=\"information.period\">86164.10</parameter>"	//sec
-"				<parameter name=\"is_static\">1</parameter>"
-"			</object>"
-"		</object>",&solar_system);
+"<EVDS version=\"35\">"
+"	<object name=\"Earth_Inertial_Space\" type=\"propagator_rk4\">"
+"		<object name=\"Earth\" type=\"planet\">"
+"			<parameter name=\"gravity.mu\">3.9860044e14</parameter>"		//m3 sec-2
+"			<parameter name=\"geometry.radius\">6378.145e3</parameter>"		//m
+"			<parameter name=\"information.period\">86164.10</parameter>"	//sec
+"			<parameter name=\"is_static\">1</parameter>"
+"		</object>"
+"	</object>"
+"</EVDS>",&solar_system);
 
 	//Create moon
 	/*EVDS_Object_Create(inertial_earth,&planet_earth_moon);
@@ -120,35 +122,16 @@ void FWAS_LoadScene_EarthMoon(FWAS* simulator) {
 
 
 ////////////////////////////////////////////////////////////////////////////////
-/// Load a vessel from file
+/// Load vessel(s) from file
 ////////////////////////////////////////////////////////////////////////////////
-EVDS_OBJECT* FWAS_Vessel_LoadFromFile(FWAS* simulator, char* filename) {
-	EVDS_OBJECT *root,*vessel;
-	simulator->log(FWAS_MESSAGE_INFO,"FWAS_Vessel_Load: %s",filename);
-
-	//Load the vessel
-	EVDS_System_GetRootInertialSpace(simulator->system,&root);	
-	EVDS_Object_LoadFromFile(root,filename,&vessel);
-	EVDS_Object_Initialize(vessel,1);
-	return vessel;
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-/// Load a vessel from file and place it somewhere on the planet
-////////////////////////////////////////////////////////////////////////////////
-EVDS_OBJECT* FWAS_Vessel_LoadAndPlace(FWAS* simulator, EVDS_GEODETIC_COORDINATE* location, char* filename) {
+EVDS_OBJECT* FWAS_Vessel_LoadFromFile(FWAS* simulator, EVDS_OBJECT* parent, char* filename) {
+	char reference[1025] = { 0 };
 	EVDS_OBJECT* vessel;
-	EVDS_STATE_VECTOR vector;
-	simulator->log(FWAS_MESSAGE_INFO,"FWAS_Vessel_LoadAndPlace: %s",filename);
+	EVDS_Object_GetReference(parent,0,reference,1024);
+	simulator->log(FWAS_MESSAGE_INFO,"FWAS_Vessel_Load: Load from %s into %s...",filename,reference);
 
 	//Load the vessel
-	EVDS_Object_LoadFromFile(location->datum.object,filename,&vessel);
-
-	//Place vessel at location and initialize it
-	EVDS_Object_GetStateVector(vessel,&vector);
-	EVDS_Geodetic_ToVector(&vector.position,location);
-	EVDS_Object_SetStateVector(vessel,&vector);
+	EVDS_Object_LoadFromFile(parent,filename,&vessel);
 	EVDS_Object_Initialize(vessel,1);
 	return vessel;
 }
@@ -159,4 +142,18 @@ EVDS_OBJECT* FWAS_Vessel_LoadAndPlace(FWAS* simulator, EVDS_GEODETIC_COORDINATE*
 ////////////////////////////////////////////////////////////////////////////////
 void FWAS_Vessel_SetActive(FWAS* simulator, EVDS_OBJECT* vessel) {
 	simulator->active_vessel = vessel;	
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// Get planet by name
+////////////////////////////////////////////////////////////////////////////////
+EVDS_OBJECT* FWAS_Planet_GetByName(FWAS* simulator, char* name) {
+	EVDS_OBJECT* planet;
+	if (EVDS_System_GetObjectByName(simulator->system,name,0,&planet) != EVDS_OK) {
+		simulator->log(FWAS_MESSAGE_ERROR,"FWAS_Planet_GetByName: Not found: %s",name);
+		return 0;
+	} else {
+		return planet;
+	}
 }

@@ -156,8 +156,6 @@ PLUGIN_API int XPluginStart(char* outName, char* outSig, char* outDesc) {
 /// Plugin initialization
 ////////////////////////////////////////////////////////////////////////////////
 PLUGIN_API int XPluginEnable(void) {
-	EVDS_GEODETIC_COORDINATE location;
-
 	//Initialize simulator
 	FWAS_Initialize(&simulator);
 	FWAS_SetCallback_Log(simulator,FWAS_Log);
@@ -165,11 +163,10 @@ PLUGIN_API int XPluginEnable(void) {
 
 	//Set scene matching X-Plane world
 	FWAS_LoadScene_EarthMoon(simulator);
-	EVDS_System_GetObjectByName(simulator->system,"Earth",0,&earth);
+	earth = FWAS_Planet_GetByName(simulator,"Earth");
 
 	//Add home base
-	EVDS_Geodetic_Set(&location,earth, 45.920178, 63.343250, 119.0);
-	homebase = FWAS_Vessel_LoadAndPlace(simulator,&location,"./Resources/plugins/fwas_x-plane/launchpad.evds");
+	homebase = FWAS_Vessel_LoadFromFile(simulator,earth,"./Resources/plugins/fwas_x-plane/xsag_launchpad.evds");
 
 	//FWAS_Vessel_SetActive(simulator,
 		//FWAS_Vessel_Load(simulator,"./Resources/plugins/fwas_x-plane/rv505.evds"));
