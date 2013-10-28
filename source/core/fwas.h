@@ -49,15 +49,15 @@ typedef void FWAS_Callback_Vessel(EVDS_OBJECT* vessel);
 
 
 /// Information message
-#define FWAS_MESSAGE_INFO		0
+#define FWAS_INFO			0
 /// Warning message
-#define FWAS_MESSAGE_WARNING	1
+#define FWAS_WARNING		1
 /// Error message
-#define FWAS_MESSAGE_ERROR		2
+#define FWAS_ERROR			2
 
 
 /// Number of LODs for the object meshes
-#define FWAS_LOD_LEVELS			4
+#define FWAS_LOD_LEVELS		6
 
 
 
@@ -108,21 +108,25 @@ void FWAS_LoadScene_SolarSystem(FWAS* simulator);
 ////////////////////////////////////////////////////////////////////////////////
 /// Vessel and scenery (building) management
 ////////////////////////////////////////////////////////////////////////////////
-/// Load vessel(s) from file
-EVDS_OBJECT* FWAS_Vessel_LoadFromFile(FWAS* simulator, EVDS_OBJECT* parent, char* filename);
+/// Load object(s) from file
+EVDS_OBJECT* FWAS_Object_LoadFromFile(FWAS* simulator, EVDS_OBJECT* parent, char* filename);
+/// Load object(s) from string
+//EVDS_OBJECT* FWAS_Object_LoadFromString(FWAS* simulator, EVDS_OBJECT* parent, char* description);
+
 /// Iterate across every vessel in parent
-void FWAS_Vessel_IterateChildren(FWAS* simulator, EVDS_OBJECT* parent, FWAS_Callback_Vessel* callback);
+void FWAS_Object_IterateChildren(FWAS* simulator, EVDS_OBJECT* parent, FWAS_Callback_Vessel* callback);
 /// Iterate across every vessel in parent (asynchronous)
-//void FWAS_Vessel_AsyncIterateChildren(FWAS* simulator, EVDS_OBJECT* parent, FWAS_Callback_Vessel* callback);
+//void FWAS_Object_AsyncIterateChildren(FWAS* simulator, EVDS_OBJECT* parent, FWAS_Callback_Vessel* callback);
+/// Iterate across every object of given type
+//void FWAS_Object_IterateByType(FWAS* simulator, char* type, FWAS_Callback_Vessel* callback);
+/// Iterate across every object of given type (asynchronous)
+//void FWAS_Object_AsyncIterateByType(FWAS* simulator, char* type, FWAS_Callback_Vessel* callback);
+
+/// Get object by name
+EVDS_OBJECT* FWAS_Object_GetByName(FWAS* simulator, char* name);
+
 /// Set active vessel
-void FWAS_Vessel_SetActive(FWAS* simulator, EVDS_OBJECT* vessel);
-
-
-////////////////////////////////////////////////////////////////////////////////
-/// Planets and solar system management
-////////////////////////////////////////////////////////////////////////////////
-/// Get planet by name
-EVDS_OBJECT* FWAS_Planet_GetByName(FWAS* simulator, char* name);
+void FWAS_Object_SetActiveVessel(FWAS* simulator, EVDS_OBJECT* vessel);
 
 
 ////////////////////////////////////////////////////////////////////////////////

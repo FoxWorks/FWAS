@@ -6,6 +6,7 @@
 	ProjectGUID="{F86FC6CB-09A3-E34C-B355-ADEAE5EF050A}"
 	RootNamespace="fwas_core"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -50,8 +51,8 @@
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
 				ProgramDataBaseFileName="$(OutDir)\fwas_cored32.pdb"
+				WarningLevel="3"
 				DebugInformationFormat="4"
 				CompileAs="1"
 			/>
@@ -68,14 +69,11 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\fwas_cored32.lib"
 				AdditionalOptions="/MACHINE:X86"
+				OutputFile="$(OutDir)\fwas_cored32.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -85,12 +83,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -129,8 +121,8 @@
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
 				ProgramDataBaseFileName="$(OutDir)\fwas_cored.pdb"
+				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -147,14 +139,11 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\fwas_cored.lib"
 				AdditionalOptions="/MACHINE:X64"
+				OutputFile="$(OutDir)\fwas_cored.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -164,12 +153,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -206,8 +189,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
 				ProgramDataBaseFileName="$(OutDir)\fwas_core32.pdb"
+				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -224,14 +207,11 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\fwas_core32.lib"
 				AdditionalOptions="/MACHINE:X86"
+				OutputFile="$(OutDir)\fwas_core32.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -241,12 +221,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -284,8 +258,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
 				ProgramDataBaseFileName="$(OutDir)\fwas_core.pdb"
+				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -302,14 +276,11 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\fwas_core.lib"
 				AdditionalOptions="/MACHINE:X64"
+				OutputFile="$(OutDir)\fwas_core.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -319,12 +290,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -362,8 +327,8 @@
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
 				ProgramDataBaseFileName="$(OutDir)\fwas_cored32.pdb"
+				WarningLevel="3"
 				DebugInformationFormat="4"
 				CompileAs="1"
 			/>
@@ -380,14 +345,11 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\fwas_cored32.lib"
 				AdditionalOptions="/MACHINE:X86"
+				OutputFile="$(OutDir)\fwas_cored32.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -397,12 +359,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -441,8 +397,8 @@
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
 				ProgramDataBaseFileName="$(OutDir)\fwas_cored.pdb"
+				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -459,14 +415,11 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\fwas_cored.lib"
 				AdditionalOptions="/MACHINE:X64"
+				OutputFile="$(OutDir)\fwas_cored.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -476,12 +429,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -518,8 +465,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
 				ProgramDataBaseFileName="$(OutDir)\fwas_core32.pdb"
+				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -536,14 +483,11 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\fwas_core32.lib"
 				AdditionalOptions="/MACHINE:X86"
+				OutputFile="$(OutDir)\fwas_core32.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -553,12 +497,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -596,8 +534,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
 				ProgramDataBaseFileName="$(OutDir)\fwas_core.pdb"
+				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -614,14 +552,11 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\fwas_core.lib"
 				AdditionalOptions="/MACHINE:X64"
+				OutputFile="$(OutDir)\fwas_core.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -631,12 +566,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -674,8 +603,8 @@
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
 				ProgramDataBaseFileName="$(OutDir)\fwas_core_std32.pdb"
+				WarningLevel="3"
 				DebugInformationFormat="4"
 				CompileAs="1"
 			/>
@@ -692,14 +621,11 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\fwas_core_std32.lib"
 				AdditionalOptions="/MACHINE:X86"
+				OutputFile="$(OutDir)\fwas_core_std32.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -709,12 +635,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -753,8 +673,8 @@
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
 				ProgramDataBaseFileName="$(OutDir)\fwas_core_std.pdb"
+				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -771,14 +691,11 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\fwas_core_std.lib"
 				AdditionalOptions="/MACHINE:X64"
+				OutputFile="$(OutDir)\fwas_core_std.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -788,12 +705,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -830,8 +741,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
 				ProgramDataBaseFileName="$(OutDir)\fwas_core_st32.pdb"
+				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -848,14 +759,11 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\fwas_core_st32.lib"
 				AdditionalOptions="/MACHINE:X86"
+				OutputFile="$(OutDir)\fwas_core_st32.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -865,12 +773,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -908,8 +810,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
 				ProgramDataBaseFileName="$(OutDir)\fwas_core_st.pdb"
+				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -926,14 +828,11 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\fwas_core_st.lib"
 				AdditionalOptions="/MACHINE:X64"
+				OutputFile="$(OutDir)\fwas_core_st.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -943,12 +842,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -986,8 +879,8 @@
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
 				ProgramDataBaseFileName="$(OutDir)\fwas_core_std32.pdb"
+				WarningLevel="3"
 				DebugInformationFormat="4"
 				CompileAs="1"
 			/>
@@ -1004,14 +897,11 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\fwas_core_std32.lib"
 				AdditionalOptions="/MACHINE:X86"
+				OutputFile="$(OutDir)\fwas_core_std32.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -1021,12 +911,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -1065,8 +949,8 @@
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
 				ProgramDataBaseFileName="$(OutDir)\fwas_core_std.pdb"
+				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -1083,14 +967,11 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\fwas_core_std.lib"
 				AdditionalOptions="/MACHINE:X64"
+				OutputFile="$(OutDir)\fwas_core_std.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -1100,12 +981,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -1142,8 +1017,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
 				ProgramDataBaseFileName="$(OutDir)\fwas_core_st32.pdb"
+				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -1160,14 +1035,11 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\fwas_core_st32.lib"
 				AdditionalOptions="/MACHINE:X86"
+				OutputFile="$(OutDir)\fwas_core_st32.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -1177,12 +1049,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -1220,8 +1086,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
 				ProgramDataBaseFileName="$(OutDir)\fwas_core_st.pdb"
+				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="1"
 			/>
@@ -1238,14 +1104,11 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\fwas_core_st.lib"
 				AdditionalOptions="/MACHINE:X64"
+				OutputFile="$(OutDir)\fwas_core_st.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -1257,12 +1120,6 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -1272,7 +1129,6 @@
 	<Files>
 		<Filter
 			Name="addons"
-			Filter=""
 			>
 			<File
 				RelativePath="..\..\external\evds\addons\evds_train_wheels.c"
@@ -1285,7 +1141,6 @@
 		</Filter>
 		<Filter
 			Name="core"
-			Filter=""
 			>
 			<File
 				RelativePath="..\..\source\core\fwas.h"
@@ -1293,6 +1148,14 @@
 			</File>
 			<File
 				RelativePath="..\..\source\core\fwas_main.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\source\core\fwas_object.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\source\core\fwas_scenes.c"
 				>
 			</File>
 		</Filter>

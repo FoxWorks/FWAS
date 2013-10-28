@@ -73,7 +73,9 @@ void XPFWAS_DrawObject(EVDS_OBJECT* object) {
 	float opengl_matrix[16];
 	EVDS_QUATERNION quaternion;
 	EVDS_MATRIX Qmatrix;
-	EVDS_STATE_VECTOR vector;
+	EVDS_VARIABLE* variable;
+	EVDS_STATE_VECTOR* vector;
+	EVDS_STATE_VECTOR stored_vector;
 	SIMC_LIST* list;
 	SIMC_LIST_ENTRY* entry;
 
@@ -83,15 +85,21 @@ void XPFWAS_DrawObject(EVDS_OBJECT* object) {
 	//Enter local transformation
 	glPushMatrix();
 
+	//Get proper state vector
+	if ((EVDS_Object_GetVariable(object,"fwas.stored.state_vector",&variable) != EVDS_OK) ||
+		((EVDS_Variable_GetDataPointer(variable,&vector) == EVDS_OK) && (!vector))) {
+		EVDS_Object_GetStateVector(object,&stored_vector);
+		vector = &stored_vector;
+	}
+
 	//Transform to current vessels coordinates or planetary coordinates
-	EVDS_Object_GetStateVector(object,&vector);
-	if ((vector.position.coordinate_system == earth) ||
-		(vector.position.coordinate_system == earth_inertial_space)) {
+	if ((vector->position.coordinate_system == earth) ||
+		(vector->position.coordinate_system == earth_inertial_space)) {
 		double x,y,z;
 		EVDS_GEODETIC_COORDINATE geocoord;
 		EVDS_GEODETIC_DATUM datum;
 		EVDS_Geodetic_DatumFromObject(&datum,earth);
-		EVDS_Geodetic_FromVector(&geocoord,&vector.position,&datum);
+		EVDS_Geodetic_FromVector(&geocoord,&vector->position,&datum);
 		XPLMWorldToLocal(geocoord.latitude,geocoord.longitude,geocoord.elevation,&x,&y,&z);
 		glTranslatef((float)x,(float)y,(float)z);
 		glRotatef( 90.0f, 0,1,0);
@@ -99,10 +107,10 @@ void XPFWAS_DrawObject(EVDS_OBJECT* object) {
 		glRotatef(-90.0f, 1,0,0);
 
 		//Get quaternion and convert it to OpenGL
-		EVDS_LVLH_QuaternionToLVLH(&quaternion,&vector.orientation,&geocoord);
+		EVDS_LVLH_QuaternionToLVLH(&quaternion,&vector->orientation,&geocoord);
 	} else {
-		glTranslatef((float)vector.position.x,(float)vector.position.y,(float)vector.position.z);
-		EVDS_Quaternion_Copy(&quaternion,&vector.orientation);
+		glTranslatef((float)vector->position.x,(float)vector->position.y,(float)vector->position.z);
+		EVDS_Quaternion_Copy(&quaternion,&vector->orientation);
 	}
 
 	//Get quaternion and convert it to OpenGL
@@ -147,7 +155,11 @@ void XPFWAS_DrawObject(EVDS_OBJECT* object) {
 
 		//Compute LOD level
 		lod = (int)(FWAS_LOD_LEVELS*visual_size*2.0f);
-		if (lod < 0) lod = 0;
+		if (userdata->lod_count > 1) {
+			if (lod < 1) lod = 1;
+		} else {
+			if (lod < 0) lod = 0;			
+		}
 		if (lod > FWAS_LOD_LEVELS-1) lod = FWAS_LOD_LEVELS-1;
 		if (lod > userdata->lod_count-1) lod = userdata->lod_count-1;
 

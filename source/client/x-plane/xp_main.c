@@ -33,6 +33,11 @@ XPLMDataRef dataref_P;
 XPLMDataRef dataref_Q;
 XPLMDataRef dataref_R;
 XPLMDataRef dataref_q;
+XPLMDataRef dataref_theta;
+XPLMDataRef dataref_phi;
+XPLMDataRef dataref_psi;
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -71,8 +76,8 @@ int XPluginDrawCallback(XPLMDrawingPhase phase, int isBefore, void* refcon) {
 	switch (phase) {
 		case xplm_Phase_Airplanes:
 			XPLMSetGraphicsState(0,0,1,0,0,1,1);
-			FWAS_Vessel_IterateChildren(fwas,earth,XPFWAS_Callback_DrawVessel);
-			FWAS_Vessel_IterateChildren(fwas,earth_inertial_space,XPFWAS_Callback_DrawVessel);
+			FWAS_Object_IterateChildren(fwas,earth,XPFWAS_Callback_DrawVessel);
+			FWAS_Object_IterateChildren(fwas,earth_inertial_space,XPFWAS_Callback_DrawVessel);
 		case xplm_Phase_Panel:
 		case xplm_Phase_Gauges:
 			return 0; //Override X-Plane aircraft rendering
@@ -85,32 +90,60 @@ int XPluginDrawCallback(XPLMDrawingPhase phase, int isBefore, void* refcon) {
 ////////////////////////////////////////////////////////////////////////////////
 /// X-Plane callback for flight loop
 ////////////////////////////////////////////////////////////////////////////////
+void XPFWAS_Callback_StoreVesselState(EVDS_OBJECT* object) {
+	EVDS_VARIABLE* variable;
+	if (EVDS_Object_GetVariable(object,"fwas.stored.state_vector",&variable) == EVDS_OK) {
+		EVDS_STATE_VECTOR* vector;
+
+		//Get pointer to state vector
+		EVDS_Variable_GetDataPointer(variable,&vector);
+		if (!vector) {
+			vector = malloc(sizeof(EVDS_STATE_VECTOR));
+			EVDS_Variable_SetDataPointer(variable,vector);
+		}
+
+		//Update state vector
+		EVDS_Object_GetStateVector(object,vector);
+	}
+}
+
 float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFlightLoop,
 						int counter, void* refcon) {
 	float q[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	EVDS_QUATERNION quaternion;
-	double x,y,z;
-
+	double x,y,z,pitch,yaw,roll;
 	EVDS_GEODETIC_COORDINATE geocoord;
 	EVDS_GEODETIC_DATUM datum;
-	EVDS_STATE_VECTOR vector;
+	EVDS_QUATERNION quaternion;
+	EVDS_VARIABLE* variable;
+	EVDS_STATE_VECTOR* vector;
+	EVDS_STATE_VECTOR stored_vector;
+
 	EVDS_OBJECT* vessel = homebase;
 	if (fwas->active_vessel) {
 		vessel = fwas->active_vessel;
 	}
 
+	//Store state of objects at the time of flight loop execution
+	FWAS_Object_IterateChildren(fwas,earth,XPFWAS_Callback_StoreVesselState);
+	FWAS_Object_IterateChildren(fwas,earth_inertial_space,XPFWAS_Callback_StoreVesselState);
+
 	//Get location of the vessel in geographic coordinates
-	EVDS_Object_GetStateVector(vessel,&vector);
+	if ((EVDS_Object_GetVariable(vessel,"fwas.stored.state_vector",&variable) != EVDS_OK) ||
+		((EVDS_Variable_GetDataPointer(variable,&vector) == EVDS_OK) && (!vector))) {
+		EVDS_Object_GetStateVector(vessel,&stored_vector);
+		vector = &stored_vector;
+	}
 	EVDS_Geodetic_DatumFromObject(&datum,earth);
-	EVDS_Geodetic_FromVector(&geocoord,&vector.position,&datum);
+	EVDS_Geodetic_FromVector(&geocoord,&vector->position,&datum);
 
 	//Mimic state of the active vessel for X-Plane camera
 	XPLMWorldToLocal(geocoord.latitude,geocoord.longitude,geocoord.elevation,&x,&y,&z);
-	EVDS_LVLH_QuaternionToLVLH(&quaternion,&vector.orientation,&geocoord);
-	//q[0] = (float)quaternion.q[0];
-	//q[1] = (float)quaternion.q[1];
-	//q[2] = (float)quaternion.q[2];
-	//q[3] = (float)quaternion.q[3];
+	EVDS_LVLH_QuaternionToLVLH(&quaternion,&vector->orientation,&geocoord);
+	EVDS_Quaternion_ToEuler(&quaternion,quaternion.coordinate_system,&roll,&pitch,&yaw);
+	q[0] = (float)quaternion.q[0];
+	q[1] = (float)quaternion.q[2];
+	q[2] = (float)quaternion.q[1];
+	q[3] = (float)quaternion.q[3];
 
 	XPLMSetDatad(dataref_x,x);
 	XPLMSetDatad(dataref_y,y);
@@ -122,6 +155,9 @@ float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFl
 	XPLMSetDataf(dataref_Q,0.0);
 	XPLMSetDataf(dataref_R,0.0);
 	XPLMSetDatavf(dataref_q,q,0,4);
+	XPLMSetDataf(dataref_theta,(float)EVDS_DEG(pitch));
+	XPLMSetDataf(dataref_phi,(float)EVDS_DEG(roll));
+	XPLMSetDataf(dataref_psi,(float)EVDS_DEG(yaw));
 
 	//Synchronize simulation with X-Plane
 	fwas->paused = XPLMGetDatai(dataref_paused);
@@ -135,21 +171,21 @@ float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFl
 			EVDS_Object_GetVariable(gimbal,"pitch.command",&pitch_command);
 			EVDS_Object_GetVariable(gimbal,"yaw.command",&yaw_command);
 
-			if ((counter % 100) > 50) {
+			/*if ((counter % 100) > 50) {
 				EVDS_Variable_SetReal(pitch_command,10.0);
 			} else {
 				EVDS_Variable_SetReal(pitch_command,-10.0);
-			}
+			}*/
 
-			if ((counter % 200) > 100) {
+			/*if ((counter % 200) > 100) {
 				EVDS_Variable_SetReal(yaw_command,10.0);
 			} else {
 				EVDS_Variable_SetReal(yaw_command,-10.0);
-			}
+			}*/
 		}
 	}
 
-	if (fwas->paused) {
+	if (1) { //fwas->paused
 		EVDS_VARIABLE* variable;
 		if (EVDS_Object_GetVariable(fwas->active_vessel,"detach",&variable) == EVDS_OK) {
 			EVDS_Variable_SetReal(variable,1.0);
@@ -169,19 +205,22 @@ PLUGIN_API int XPluginStart(char* outName, char* outSig, char* outDesc) {
 
 	//Load up datarefs
 	dataref_paused = XPLMFindDataRef("sim/time/paused");
-	dataref_x  = XPLMFindDataRef("sim/flightmodel/position/local_x");
-	dataref_y  = XPLMFindDataRef("sim/flightmodel/position/local_y");
-	dataref_z  = XPLMFindDataRef("sim/flightmodel/position/local_z");
-	dataref_vx = XPLMFindDataRef("sim/flightmodel/position/local_vx");
-	dataref_vy = XPLMFindDataRef("sim/flightmodel/position/local_vy");
-	dataref_vz = XPLMFindDataRef("sim/flightmodel/position/local_vz");
-	dataref_P  = XPLMFindDataRef("sim/flightmodel/position/Qrad");
-	dataref_Q  = XPLMFindDataRef("sim/flightmodel/position/Rrad");
-	dataref_R  = XPLMFindDataRef("sim/flightmodel/position/Prad");
-	dataref_q  = XPLMFindDataRef("sim/flightmodel/position/q");
+	dataref_x     = XPLMFindDataRef("sim/flightmodel/position/local_x");
+	dataref_y     = XPLMFindDataRef("sim/flightmodel/position/local_y");
+	dataref_z     = XPLMFindDataRef("sim/flightmodel/position/local_z");
+	dataref_vx    = XPLMFindDataRef("sim/flightmodel/position/local_vx");
+	dataref_vy    = XPLMFindDataRef("sim/flightmodel/position/local_vy");
+	dataref_vz    = XPLMFindDataRef("sim/flightmodel/position/local_vz");
+	dataref_P     = XPLMFindDataRef("sim/flightmodel/position/Qrad");
+	dataref_Q     = XPLMFindDataRef("sim/flightmodel/position/Rrad");
+	dataref_R     = XPLMFindDataRef("sim/flightmodel/position/Prad");
+	dataref_q     = XPLMFindDataRef("sim/flightmodel/position/q");
+	dataref_theta = XPLMFindDataRef("sim/flightmodel/position/theta");
+	dataref_phi   = XPLMFindDataRef("sim/flightmodel/position/phi");
+	dataref_psi   = XPLMFindDataRef("sim/flightmodel/position/psi");
 
 	//Finish initializing
-	XPFWAS_Log(FWAS_MESSAGE_INFO,"FWAS-XP: Client initialized\n");
+	XPFWAS_Log(FWAS_INFO,"FWAS-XP: Client initialized\n");
 	return 1;
 }
 
@@ -195,16 +234,16 @@ PLUGIN_API int XPluginEnable(void) {
 
 	//Setup callbacks
 	fwas->log = XPFWAS_Log;
-	XPFWAS_Log(FWAS_MESSAGE_INFO,"FWAS-XP: Client started\n");
+	XPFWAS_Log(FWAS_INFO,"FWAS-XP: Client started\n");
 
 	//Set scene matching X-Plane world
 	FWAS_LoadScene_EarthMoon(fwas);
-	earth = FWAS_Planet_GetByName(fwas,"Earth");
-	earth_inertial_space = FWAS_Planet_GetByName(fwas,"Earth_Inertial_Space");
+	earth = FWAS_Object_GetByName(fwas,"Earth");
+	earth_inertial_space = FWAS_Object_GetByName(fwas,"Earth_Inertial_Space");
 
 	//Add home base
-	homebase = FWAS_Vessel_LoadFromFile(fwas,earth,"./Resources/plugins/fwas_x-plane/xsag_launchpad.evds");
-	FWAS_Vessel_SetActive(fwas,FWAS_Vessel_LoadFromFile(fwas,homebase,"./Resources/plugins/fwas_x-plane/rv505.evds"));
+	homebase = FWAS_Object_LoadFromFile(fwas,earth,"./Resources/plugins/fwas_x-plane/xsag_launchpad.evds");
+	FWAS_Object_SetActiveVessel(fwas,FWAS_Object_LoadFromFile(fwas,homebase,"./Resources/plugins/fwas_x-plane/rv505.evds"));
 
 	//Register callbacks
 	XPLMRegisterFlightLoopCallback(XPluginFlightLoop, -1, NULL);
@@ -227,7 +266,7 @@ PLUGIN_API int XPluginEnable(void) {
 ////////////////////////////////////////////////////////////////////////////////
 PLUGIN_API void XPluginDisable(void) {
 	FWAS_Deinitialize(fwas);
-	XPFWAS_Log(FWAS_MESSAGE_INFO,"FWAS-XP: Client stopped\n");
+	XPFWAS_Log(FWAS_INFO,"FWAS-XP: Client stopped\n");
 
 	//Unregister callbacks
 	XPLMUnregisterFlightLoopCallback(XPluginFlightLoop, NULL);
