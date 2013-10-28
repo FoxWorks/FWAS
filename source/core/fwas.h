@@ -44,6 +44,8 @@ extern "C" {
 ////////////////////////////////////////////////////////////////////////////////
 /// Callback when FWAS logs a message
 typedef void FWAS_Callback_Log(int level, char* message, ...);
+/// Callback for a single vessel
+typedef void FWAS_Callback_Vessel(EVDS_OBJECT* vessel);
 
 
 /// Information message
@@ -55,7 +57,7 @@ typedef void FWAS_Callback_Log(int level, char* message, ...);
 
 
 /// Number of LODs for the object meshes
-#define FWAS_LOD_LEVELS			6
+#define FWAS_LOD_LEVELS			4
 
 
 
@@ -64,6 +66,7 @@ typedef void FWAS_Callback_Log(int level, char* message, ...);
 /// @brief FoxWorks Aerospace Simulator state
 ////////////////////////////////////////////////////////////////////////////////
 typedef struct FWAS_TAG {
+	int paused;						///< Is system paused
 	EVDS_SYSTEM* system;			///< EVDS system
 	EVDS_OBJECT* active_vessel;		///< Currently actively selected vessel
 
@@ -107,6 +110,10 @@ void FWAS_LoadScene_SolarSystem(FWAS* simulator);
 ////////////////////////////////////////////////////////////////////////////////
 /// Load vessel(s) from file
 EVDS_OBJECT* FWAS_Vessel_LoadFromFile(FWAS* simulator, EVDS_OBJECT* parent, char* filename);
+/// Iterate across every vessel in parent
+void FWAS_Vessel_IterateChildren(FWAS* simulator, EVDS_OBJECT* parent, FWAS_Callback_Vessel* callback);
+/// Iterate across every vessel in parent (asynchronous)
+//void FWAS_Vessel_AsyncIterateChildren(FWAS* simulator, EVDS_OBJECT* parent, FWAS_Callback_Vessel* callback);
 /// Set active vessel
 void FWAS_Vessel_SetActive(FWAS* simulator, EVDS_OBJECT* vessel);
 

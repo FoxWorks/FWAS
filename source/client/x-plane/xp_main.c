@@ -17,9 +17,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// Local state of the currently active vessel (overrides X-Plane camera)
 ////////////////////////////////////////////////////////////////////////////////
-FWAS* simulator;
+FWAS* fwas;
 EVDS_OBJECT* homebase;
 EVDS_OBJECT* earth;
+EVDS_OBJECT* earth_inertial_space;
 
 XPLMDataRef dataref_paused;
 XPLMDataRef dataref_x;
@@ -57,6 +58,12 @@ void XPFWAS_Log(int level, char* message, ...) {
 ////////////////////////////////////////////////////////////////////////////////
 /// X-Plane callback for drawing
 ////////////////////////////////////////////////////////////////////////////////
+void XPFWAS_Callback_DrawVessel(EVDS_OBJECT* object) {
+	char name[256] = { 0 };
+	EVDS_Object_GetName(object,name,255);
+	XPFWAS_DrawObject(object);
+}
+
 int XPluginDrawCallback(XPLMDrawingPhase phase, int isBefore, void* refcon) {
 	float dX  = 20.0f;
 	float dYZ = 20.0f;
@@ -64,10 +71,11 @@ int XPluginDrawCallback(XPLMDrawingPhase phase, int isBefore, void* refcon) {
 	switch (phase) {
 		case xplm_Phase_Airplanes:
 			XPLMSetGraphicsState(0,0,1,0,0,1,1);
-			XPFWAS_DrawObject(homebase);
+			FWAS_Vessel_IterateChildren(fwas,earth,XPFWAS_Callback_DrawVessel);
+			FWAS_Vessel_IterateChildren(fwas,earth_inertial_space,XPFWAS_Callback_DrawVessel);
 		case xplm_Phase_Panel:
 		case xplm_Phase_Gauges:
-			return 1; //Override X-Plane aircraft rendering
+			return 0; //Override X-Plane aircraft rendering
 		default:
 			return 1;
 	}
@@ -87,8 +95,8 @@ float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFl
 	EVDS_GEODETIC_DATUM datum;
 	EVDS_STATE_VECTOR vector;
 	EVDS_OBJECT* vessel = homebase;
-	if (simulator->active_vessel) {
-		vessel = simulator->active_vessel;
+	if (fwas->active_vessel) {
+		vessel = fwas->active_vessel;
 	}
 
 	//Get location of the vessel in geographic coordinates
@@ -104,7 +112,6 @@ float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFl
 	//q[2] = (float)quaternion.q[2];
 	//q[3] = (float)quaternion.q[3];
 
-	if (counter % 50 < 25) {
 	XPLMSetDatad(dataref_x,x);
 	XPLMSetDatad(dataref_y,y);
 	XPLMSetDatad(dataref_z,z);
@@ -115,6 +122,38 @@ float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFl
 	XPLMSetDataf(dataref_Q,0.0);
 	XPLMSetDataf(dataref_R,0.0);
 	XPLMSetDatavf(dataref_q,q,0,4);
+
+	//Synchronize simulation with X-Plane
+	fwas->paused = XPLMGetDatai(dataref_paused);
+
+	//Do some test
+	{
+		EVDS_OBJECT* gimbal;
+		if (EVDS_System_GetObjectByName(fwas->system,"RD-171",0,&gimbal) == EVDS_OK) {
+			EVDS_VARIABLE* pitch_command;
+			EVDS_VARIABLE* yaw_command;
+			EVDS_Object_GetVariable(gimbal,"pitch.command",&pitch_command);
+			EVDS_Object_GetVariable(gimbal,"yaw.command",&yaw_command);
+
+			if ((counter % 100) > 50) {
+				EVDS_Variable_SetReal(pitch_command,10.0);
+			} else {
+				EVDS_Variable_SetReal(pitch_command,-10.0);
+			}
+
+			if ((counter % 200) > 100) {
+				EVDS_Variable_SetReal(yaw_command,10.0);
+			} else {
+				EVDS_Variable_SetReal(yaw_command,-10.0);
+			}
+		}
+	}
+
+	if (fwas->paused) {
+		EVDS_VARIABLE* variable;
+		if (EVDS_Object_GetVariable(fwas->active_vessel,"detach",&variable) == EVDS_OK) {
+			EVDS_Variable_SetReal(variable,1.0);
+		}
 	}
 	return -1;
 }
@@ -152,21 +191,20 @@ PLUGIN_API int XPluginStart(char* outName, char* outSig, char* outDesc) {
 ////////////////////////////////////////////////////////////////////////////////
 PLUGIN_API int XPluginEnable(void) {
 	//Initialize simulator
-	FWAS_Initialize(&simulator);
+	FWAS_Initialize(&fwas);
 
 	//Setup callbacks
-	simulator->log = XPFWAS_Log;
+	fwas->log = XPFWAS_Log;
 	XPFWAS_Log(FWAS_MESSAGE_INFO,"FWAS-XP: Client started\n");
 
 	//Set scene matching X-Plane world
-	FWAS_LoadScene_EarthMoon(simulator);
-	earth = FWAS_Planet_GetByName(simulator,"Earth");
+	FWAS_LoadScene_EarthMoon(fwas);
+	earth = FWAS_Planet_GetByName(fwas,"Earth");
+	earth_inertial_space = FWAS_Planet_GetByName(fwas,"Earth_Inertial_Space");
 
 	//Add home base
-	homebase = FWAS_Vessel_LoadFromFile(simulator,earth,"./Resources/plugins/fwas_x-plane/xsag_launchpad.evds");
-
-	//FWAS_Vessel_SetActive(simulator,
-		//FWAS_Vessel_Load(simulator,"./Resources/plugins/fwas_x-plane/rv505.evds"));
+	homebase = FWAS_Vessel_LoadFromFile(fwas,earth,"./Resources/plugins/fwas_x-plane/xsag_launchpad.evds");
+	FWAS_Vessel_SetActive(fwas,FWAS_Vessel_LoadFromFile(fwas,homebase,"./Resources/plugins/fwas_x-plane/rv505.evds"));
 
 	//Register callbacks
 	XPLMRegisterFlightLoopCallback(XPluginFlightLoop, -1, NULL);
@@ -188,7 +226,7 @@ PLUGIN_API int XPluginEnable(void) {
 /// Plugin deinitialization
 ////////////////////////////////////////////////////////////////////////////////
 PLUGIN_API void XPluginDisable(void) {
-	FWAS_Deinitialize(simulator);
+	FWAS_Deinitialize(fwas);
 	XPFWAS_Log(FWAS_MESSAGE_INFO,"FWAS-XP: Client stopped\n");
 
 	//Unregister callbacks

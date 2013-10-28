@@ -71,34 +71,45 @@ void XPFWAS_DrawObject(EVDS_OBJECT* object) {
 	FWAS_EVDS_USERDATA* userdata;
 	int i,j,lod;
 	float opengl_matrix[16];
+	EVDS_QUATERNION quaternion;
 	EVDS_MATRIX Qmatrix;
 	EVDS_STATE_VECTOR vector;
 	SIMC_LIST* list;
 	SIMC_LIST_ENTRY* entry;
+
+	//Do not draw planet Earth itself (or it will draw all its children recursively... wrongly)
+	if (object == earth) return;
 
 	//Enter local transformation
 	glPushMatrix();
 
 	//Transform to current vessels coordinates or planetary coordinates
 	EVDS_Object_GetStateVector(object,&vector);
-	if (vector.position.coordinate_system == earth) {
+	if ((vector.position.coordinate_system == earth) ||
+		(vector.position.coordinate_system == earth_inertial_space)) {
 		double x,y,z;
 		EVDS_GEODETIC_COORDINATE geocoord;
-		EVDS_Geodetic_FromVector(&geocoord,&vector.position,0);
+		EVDS_GEODETIC_DATUM datum;
+		EVDS_Geodetic_DatumFromObject(&datum,earth);
+		EVDS_Geodetic_FromVector(&geocoord,&vector.position,&datum);
 		XPLMWorldToLocal(geocoord.latitude,geocoord.longitude,geocoord.elevation,&x,&y,&z);
 		glTranslatef((float)x,(float)y,(float)z);
 		glRotatef( 90.0f, 0,1,0);
 		glRotatef(180.0f, 0,1,0);
 		glRotatef(-90.0f, 1,0,0);
+
+		//Get quaternion and convert it to OpenGL
+		EVDS_LVLH_QuaternionToLVLH(&quaternion,&vector.orientation,&geocoord);
 	} else {
 		glTranslatef((float)vector.position.x,(float)vector.position.y,(float)vector.position.z);
+		EVDS_Quaternion_Copy(&quaternion,&vector.orientation);
 	}
 
 	//Get quaternion and convert it to OpenGL
-	EVDS_Quaternion_ToMatrix(&vector.orientation,Qmatrix);
-	for (i=0; i<4; i++) { //Transpose matrix for OpenGL
+	EVDS_Quaternion_ToMatrix(&quaternion,Qmatrix);
+	for (i=0; i<4; i++) {
 		for (j=0; j<4; j++) {
-			opengl_matrix[i*4+j] = (float)Qmatrix[i*4+j];//(float)Qmatrix[j*4+i];
+			opengl_matrix[i*4+j] = (float)Qmatrix[i*4+j];
 		}
 	}
 	glMultMatrixf(opengl_matrix);
@@ -135,13 +146,13 @@ void XPFWAS_DrawObject(EVDS_OBJECT* object) {
 		visual_size = sqrtf(visual_size);
 
 		//Compute LOD level
-		lod = (int)(FWAS_LOD_LEVELS*visual_size*1.5f);
+		lod = (int)(FWAS_LOD_LEVELS*visual_size*2.0f);
 		if (lod < 0) lod = 0;
 		if (lod > FWAS_LOD_LEVELS-1) lod = FWAS_LOD_LEVELS-1;
 		if (lod > userdata->lod_count-1) lod = userdata->lod_count-1;
 
 		//Draw mesh with corresponding LOD
-		XPFWAS_DrawMesh(userdata->mesh[lod]);
+		if (visual_size > 0.02) XPFWAS_DrawMesh(userdata->mesh[lod]);
 	}
 
 	//Draw children

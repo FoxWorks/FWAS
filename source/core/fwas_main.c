@@ -52,7 +52,7 @@ void FWAS_EVDS_MeshGenerate_Thread(FWAS_EVDS_USERDATA* userdata) {
 
 	//Generate mesh for the object
 	for (lod = 1; lod < FWAS_LOD_LEVELS; lod++) { //Generate LODs from the last
-		float resolution = 0.15f * powf(2.0f,FWAS_LOD_LEVELS-lod-1);
+		float resolution = 0.05f * powf(1.5f,FWAS_LOD_LEVELS-lod-1);
 
 		EVDS_Mesh_Generate(userdata->object,&userdata->mesh[lod],resolution,0);
 		userdata->lod_count++; //Signal that LOD is present
@@ -62,6 +62,25 @@ void FWAS_EVDS_MeshGenerate_Thread(FWAS_EVDS_USERDATA* userdata) {
 	SIMC_Lock_Enter(FWAS_EVDS_MeshGenerate_ThreadsRunningLock);
 		FWAS_EVDS_MeshGenerate_ThreadsRunning--;
 	SIMC_Lock_Leave(FWAS_EVDS_MeshGenerate_ThreadsRunningLock);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// Thread that simulates state
+////////////////////////////////////////////////////////////////////////////////
+void FWAS_EVDS_Simulate_Thread(FWAS* simulator) {
+	while (1) {
+		if (!simulator->paused) {
+			int i;
+			EVDS_OBJECT* root;
+			EVDS_RigidBody_UpdateDetaching(simulator->system);
+			EVDS_System_GetRootInertialSpace(simulator->system,&root);
+			for (i = 0; i < 10; i++) {
+			EVDS_Object_Solve(root,1.0f/30.0f);
+			}
+		}
+		SIMC_Thread_Sleep(1.0f/30.0f);
+	}
 }
 
 
@@ -114,6 +133,10 @@ int FWAS_Initialize(FWAS** p_simulator) {
 	callbacks.OnPostInitialize = FWAS_EVDS_Callback_PostInitialize;
 	callbacks.OnDeinitialize = 0;
 	EVDS_System_SetGlobalCallbacks(simulator->system,&callbacks);
+
+	//Start simulation thread
+	simulator->paused = 1;
+	SIMC_Thread_Create(FWAS_EVDS_Simulate_Thread,simulator);
 	return 1;
 }
 
@@ -146,16 +169,7 @@ void FWAS_LoadScene_EarthMoon(FWAS* simulator) {
 "		</object>"
 "	</object>"
 "</EVDS>",&solar_system);
-
-	//Create moon
-	/*EVDS_Object_Create(inertial_earth,&planet_earth_moon);
-	EVDS_Object_SetType(planet_earth_moon,"planet");
-	EVDS_Object_SetName(planet_earth_moon,"Moon");
-	EVDS_Object_AddRealVariable(planet_earth_moon,"mu",0.0490277e14,0);	//m3 sec-2
-	EVDS_Object_AddRealVariable(planet_earth_moon,"radius",1737e3,0);		//m
-	EVDS_Object_SetPosition(planet_earth_moon,inertial_earth,0.0,362570e3,0.0);
-	EVDS_Object_SetVelocity(planet_earth_moon,inertial_earth,1000.0,0.0,0.0);
-	EVDS_Object_Initialize(planet_earth_moon,1);*/
+	EVDS_Object_Initialize(solar_system,1);
 }
 
 
@@ -172,6 +186,23 @@ EVDS_OBJECT* FWAS_Vessel_LoadFromFile(FWAS* simulator, EVDS_OBJECT* parent, char
 	EVDS_Object_LoadFromFile(parent,filename,&vessel);
 	EVDS_Object_Initialize(vessel,0);
 	return vessel;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// Iterate through every child of the parent
+////////////////////////////////////////////////////////////////////////////////
+void FWAS_Vessel_IterateChildren(FWAS* simulator, EVDS_OBJECT* parent, FWAS_Callback_Vessel* callback) {
+	SIMC_LIST* list;
+	SIMC_LIST_ENTRY* entry;
+
+	EVDS_Object_GetChildren(parent,&list);
+	entry = SIMC_List_GetFirst(list);
+	while (entry) {
+		EVDS_OBJECT* child = SIMC_List_GetData(list,entry);
+		callback(child);
+		entry = SIMC_List_GetNext(list,entry);
+	}
 }
 
 

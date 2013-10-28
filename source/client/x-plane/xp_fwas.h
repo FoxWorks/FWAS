@@ -65,6 +65,7 @@
 
 /// Planet earth
 extern EVDS_OBJECT* earth;
+extern EVDS_OBJECT* earth_inertial_space;
 
 /// Log message
 void XPFWAS_Log(int level, char* message, ...);
