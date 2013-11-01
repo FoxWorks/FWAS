@@ -57,6 +57,11 @@ void XPFWAS_Log(int level, char* message, ...) {
 #endif
 }
 
+int XPFWAS_EVDS_Log(int type, char* message) {
+	XPFWAS_Log(type,message);
+	return EVDS_OK;
+}
+
 
 
 
@@ -117,6 +122,7 @@ float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFl
 	EVDS_VARIABLE* variable;
 	EVDS_STATE_VECTOR* vector;
 	EVDS_STATE_VECTOR stored_vector;
+	EVDS_VECTOR position;
 
 	EVDS_OBJECT* vessel = homebase;
 	if (fwas->active_vessel) {
@@ -133,8 +139,17 @@ float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFl
 		EVDS_Object_GetStateVector(vessel,&stored_vector);
 		vector = &stored_vector;
 	}
+
+	//Use center of mass if applicable
+	if (EVDS_Object_GetVariable(vessel,"total_cm",&variable) == EVDS_OK) {
+		EVDS_Variable_GetVector(variable,&position);
+	} else {
+		EVDS_Vector_Copy(&position,&vector->position);
+	}
+
+	//Convert to geographic coordinates
 	EVDS_Geodetic_DatumFromObject(&datum,earth);
-	EVDS_Geodetic_FromVector(&geocoord,&vector->position,&datum);
+	EVDS_Geodetic_FromVector(&geocoord,&position,&datum);
 
 	//Mimic state of the active vessel for X-Plane camera
 	XPLMWorldToLocal(geocoord.latitude,geocoord.longitude,geocoord.elevation,&x,&y,&z);
@@ -163,29 +178,31 @@ float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFl
 	fwas->paused = XPLMGetDatai(dataref_paused);
 
 	//Do some test
-	{
+	/*{
 		EVDS_OBJECT* gimbal;
-		if (EVDS_System_GetObjectByName(fwas->system,"RD-171",0,&gimbal) == EVDS_OK) {
+		if (EVDS_System_GetObjectByName(fwas->system,0,"RD-171",&gimbal) == EVDS_OK) {
 			EVDS_VARIABLE* pitch_command;
 			EVDS_VARIABLE* yaw_command;
 			EVDS_Object_GetVariable(gimbal,"pitch.command",&pitch_command);
 			EVDS_Object_GetVariable(gimbal,"yaw.command",&yaw_command);
 
-			/*if ((counter % 100) > 50) {
+			//EVDS_Variable_SetReal(pitch_command,100.0*sin(SIMC_Thread_GetTime()));
+
+			if ((counter % 100) > 50) {
 				EVDS_Variable_SetReal(pitch_command,10.0);
 			} else {
 				EVDS_Variable_SetReal(pitch_command,-10.0);
-			}*/
+			}
 
-			/*if ((counter % 200) > 100) {
+			if ((counter % 200) > 100) {
 				EVDS_Variable_SetReal(yaw_command,10.0);
 			} else {
 				EVDS_Variable_SetReal(yaw_command,-10.0);
-			}*/
+			}
 		}
-	}
+	}*/
 
-	if (1) { //fwas->paused
+	if (fwas->paused) {
 		EVDS_VARIABLE* variable;
 		if (EVDS_Object_GetVariable(fwas->active_vessel,"detach",&variable) == EVDS_OK) {
 			EVDS_Variable_SetReal(variable,1.0);
@@ -230,6 +247,7 @@ PLUGIN_API int XPluginStart(char* outName, char* outSig, char* outDesc) {
 ////////////////////////////////////////////////////////////////////////////////
 PLUGIN_API int XPluginEnable(void) {
 	//Initialize simulator
+	EVDS_SetLogCallback(XPFWAS_EVDS_Log);
 	FWAS_Initialize(&fwas);
 
 	//Setup callbacks

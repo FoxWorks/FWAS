@@ -34,6 +34,39 @@ void XPFWAS_ProjectXYZ(float x, float y, float z, float* u, float* v) {
 
 
 ////////////////////////////////////////////////////////////////////////////////
+/// Draw rocket engine exhaust
+////////////////////////////////////////////////////////////////////////////////
+void XPFWAS_DrawEngineExhaust(
+		float thruster_length, float plume_length,
+		float thruster_width, float plume_width,
+		float thruster_length_noise, float plume_length_noise,
+		float r1, float g1, float b1, float a1,
+		float r2, float g2, float b2, float a2) {
+	float w,step;
+	glBegin(GL_TRIANGLES);
+
+	step = 2*EVDS_PIf/16.0f;
+	for (w = 0; w < 2*EVDS_PIf; w += step) {
+		float noise = 1.0f*rand()/RAND_MAX;
+
+		glColor4f(r1, g1, b1, a1);
+		glVertex3f(thruster_length+noise*thruster_length_noise,0.5f*thruster_width*cosf(w),0.5f*thruster_width*sinf(w));
+		glColor4f(r2, g2, b2, a2);
+		glVertex3f(plume_length+noise*plume_length_noise,0.5f*plume_width*cosf(w+step),0.5f*plume_width*sinf(w+step));
+		glVertex3f(plume_length+noise*plume_length_noise,0.5f*plume_width*cosf(w),0.5f*plume_width*sinf(w));
+
+		glColor4f(r1, g1, b1, a1);
+		glVertex3f(thruster_length+noise*thruster_length_noise,0.5f*thruster_width*cosf(w),0.5f*thruster_width*sinf(w));
+		glVertex3f(thruster_length+noise*thruster_length_noise,0.5f*thruster_width*cosf(w+step),0.5f*thruster_width*sinf(w+step));
+		glColor4f(r2, g2, b2, a2);
+		glVertex3f(plume_length+noise*plume_length_noise,0.5f*plume_width*cosf(w+step),0.5f*plume_width*sinf(w+step));
+	}
+
+	glEnd();
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
 /// Draw a mesh in 3D world
 ////////////////////////////////////////////////////////////////////////////////
 void XPFWAS_DrawMesh(EVDS_MESH* mesh) {
@@ -165,6 +198,38 @@ void XPFWAS_DrawObject(EVDS_OBJECT* object) {
 
 		//Draw mesh with corresponding LOD
 		if (visual_size > 0.02) XPFWAS_DrawMesh(userdata->mesh[lod]);
+	}
+
+	//Draw special effects
+	if (EVDS_Object_CheckType(object,"rocket_engine") == EVDS_OK) {
+		EVDS_REAL exit_radius = 0.0;
+		EVDS_REAL length = 0.0;
+		EVDS_REAL current_thrust = 0.0;
+		EVDS_VARIABLE* variable;
+
+		//Fetch variables
+		if (EVDS_Object_GetVariable(object,"current.thrust",&variable) == EVDS_OK) {
+			EVDS_Variable_GetReal(variable,&current_thrust);
+		}
+		if (current_thrust > 0.0) {
+			if (EVDS_Object_GetVariable(object,"nozzle.exit_radius",&variable) == EVDS_OK) {
+				EVDS_Variable_GetReal(variable,&exit_radius);
+			}
+			if (EVDS_Object_GetVariable(object,"nozzle.length",&variable) == EVDS_OK) {
+				EVDS_Variable_GetReal(variable,&length);
+			}
+
+			//Draw rocket engines exhaust
+			XPLMSetGraphicsState(0,0,0,0,1,1,0);
+			XPFWAS_DrawEngineExhaust(
+				(float)length,	(float)length+(float)exit_radius*20.0f,
+				(float)exit_radius,	(float)exit_radius*6.0f,
+				0.0f, 0.0f,
+				1.0f,1.0f,0.4f,0.8f,
+				1.0f,1.0f,0.9f,0.0f);
+			glColor4f(1.0f,1.0f,1.0f,1.0f);
+			XPLMSetGraphicsState(0,0,1,0,0,1,1);
+		}
 	}
 
 	//Draw children

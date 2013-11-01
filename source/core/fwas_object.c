@@ -68,7 +68,7 @@ void FWAS_Object_IterateChildren(FWAS* simulator, EVDS_OBJECT* parent, FWAS_Call
 ////////////////////////////////////////////////////////////////////////////////
 EVDS_OBJECT* FWAS_Object_GetByName(FWAS* simulator, char* name) {
 	EVDS_OBJECT* planet;
-	if (EVDS_System_GetObjectByName(simulator->system,name,0,&planet) != EVDS_OK) {
+	if (EVDS_System_GetObjectByName(simulator->system,0,name,&planet) != EVDS_OK) {
 		simulator->log(FWAS_ERROR,"FWAS_Object_GetByName: Not found: %s",name);
 		return 0;
 	} else {
