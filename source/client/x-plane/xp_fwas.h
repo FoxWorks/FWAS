@@ -62,6 +62,7 @@
 #	define snprintf _snprintf
 #	define snscanf _snscanf
 #endif
+#define PLUGIN_DIR(file)	"./Resources/plugins/fwas_x-plane/"file
 
 /// Planet earth
 extern EVDS_OBJECT* earth;
@@ -69,9 +70,11 @@ extern EVDS_OBJECT* earth_inertial_space;
 
 /// Log message
 void XPFWAS_Log(int level, char* message, ...);
-// Draw a single mesh
+/// Enable/disable simulation
+void XPFWAS_SetActive(int active);
+/// Draw a single mesh
 void XPFWAS_DrawMesh(EVDS_MESH* mesh);
-// Draw an object
+/// Draw an object
 void XPFWAS_DrawObject(EVDS_OBJECT* object);
 
 #endif

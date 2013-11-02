@@ -17,11 +17,20 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// Local state of the currently active vessel (overrides X-Plane camera)
 ////////////////////////////////////////////////////////////////////////////////
+int fwas_enabled = 0;
+int fwas_startup = 1;
+int xp_changing_aircraft = 0;
+int xp_request_change = 0;
+char xp_request_path[8192];
+char xp_aircraft_name[8192];
+char xp_aircraft_path[8192];
+
 FWAS* fwas;
 EVDS_OBJECT* homebase;
 EVDS_OBJECT* earth;
 EVDS_OBJECT* earth_inertial_space;
 
+XPLMDataRef override_planepath;
 XPLMDataRef dataref_paused;
 XPLMDataRef dataref_x;
 XPLMDataRef dataref_y;
@@ -66,6 +75,39 @@ int XPFWAS_EVDS_Log(int type, char* message) {
 
 
 ////////////////////////////////////////////////////////////////////////////////
+/// Set state of the FWAS simulator
+////////////////////////////////////////////////////////////////////////////////
+void XPFWAS_SetActive(int active) {
+	if (active) {
+		XPFWAS_Log(FWAS_INFO,"FWAS-XP: Simulator activated");
+		if (!fwas_enabled) {
+			XPLMGetNthAircraftModel(0,xp_aircraft_name,xp_aircraft_path);
+		}
+
+		xp_changing_aircraft = 1;
+		//if (fwas_startup) { //Can set users aircraft directly during initialization
+			//XPLMSetUsersAircraft(PLUGIN_DIR("fwas_null_aircraft.acf"));
+		//} else { //Must submit a request to change aircraft during next frame
+			xp_request_change = 1;
+			strcpy(xp_request_path,PLUGIN_DIR("fwas_null_aircraft.acf"));
+		//}
+		XPLMSetDatavi(override_planepath,&active,0,1);
+	} else {
+		XPFWAS_Log(FWAS_INFO,"FWAS-XP: Deactivated simulator");
+		XPLMSetDatavi(override_planepath,&active,0,1);
+
+		//Submit a request for changing model back to X-Plane one
+		xp_changing_aircraft = 1;
+		xp_request_change = 1;
+		strcpy(xp_request_path,xp_aircraft_path);
+	}
+	fwas_enabled = active;
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
 /// X-Plane callback for drawing
 ////////////////////////////////////////////////////////////////////////////////
 void XPFWAS_Callback_DrawVessel(EVDS_OBJECT* object) {
@@ -75,9 +117,6 @@ void XPFWAS_Callback_DrawVessel(EVDS_OBJECT* object) {
 }
 
 int XPluginDrawCallback(XPLMDrawingPhase phase, int isBefore, void* refcon) {
-	float dX  = 20.0f;
-	float dYZ = 20.0f;
-
 	switch (phase) {
 		case xplm_Phase_Airplanes:
 			XPLMSetGraphicsState(0,0,1,0,0,1,1);
@@ -85,7 +124,11 @@ int XPluginDrawCallback(XPLMDrawingPhase phase, int isBefore, void* refcon) {
 			FWAS_Object_IterateChildren(fwas,earth_inertial_space,XPFWAS_Callback_DrawVessel);
 		case xplm_Phase_Panel:
 		case xplm_Phase_Gauges:
-			return 0; //Override X-Plane aircraft rendering
+			if (fwas_enabled) {
+				return 1; //Override X-Plane aircraft rendering
+			} else {
+				return 1; //Keep rendering X-Plane aircraft
+			}
 		default:
 			return 1;
 	}
@@ -114,7 +157,6 @@ void XPFWAS_Callback_StoreVesselState(EVDS_OBJECT* object) {
 
 float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFlightLoop,
 						int counter, void* refcon) {
-	float q[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	double x,y,z,pitch,yaw,roll;
 	EVDS_GEODETIC_COORDINATE geocoord;
 	EVDS_GEODETIC_DATUM datum;
@@ -127,6 +169,9 @@ float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFl
 	EVDS_OBJECT* vessel = homebase;
 	if (fwas->active_vessel) {
 		vessel = fwas->active_vessel;
+	}
+	if ((counter % 500) == 499) {
+		XPFWAS_SetActive(!fwas_enabled);
 	}
 
 	//Store state of objects at the time of flight loop execution
@@ -151,34 +196,55 @@ float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFl
 	EVDS_Geodetic_DatumFromObject(&datum,earth);
 	EVDS_Geodetic_FromVector(&geocoord,&position,&datum);
 
-	//Mimic state of the active vessel for X-Plane camera
+	//Get OpenGL XYZ of vessel in the world
 	XPLMWorldToLocal(geocoord.latitude,geocoord.longitude,geocoord.elevation,&x,&y,&z);
-	EVDS_LVLH_QuaternionToLVLH(&quaternion,&vector->orientation,&geocoord);
-	EVDS_Quaternion_ToEuler(&quaternion,quaternion.coordinate_system,&roll,&pitch,&yaw);
-	q[0] = (float)quaternion.q[0];
-	q[1] = (float)quaternion.q[2];
-	q[2] = (float)quaternion.q[1];
-	q[3] = (float)quaternion.q[3];
 
-	XPLMSetDatad(dataref_x,x);
-	XPLMSetDatad(dataref_y,y);
-	XPLMSetDatad(dataref_z,z);
-	XPLMSetDataf(dataref_vx,0.0);
-	XPLMSetDataf(dataref_vy,0.0);
-	XPLMSetDataf(dataref_vz,0.0);
-	XPLMSetDataf(dataref_P,0.0);
-	XPLMSetDataf(dataref_Q,0.0);
-	XPLMSetDataf(dataref_R,0.0);
-	XPLMSetDatavf(dataref_q,q,0,4);
-	XPLMSetDataf(dataref_theta,(float)EVDS_DEG(pitch));
-	XPLMSetDataf(dataref_phi,(float)EVDS_DEG(roll));
-	XPLMSetDataf(dataref_psi,(float)EVDS_DEG(yaw));
+	//Get quaternion of vessel in the world (assuming LVLH coordinates in origin)
+	XPLMLocalToWorld(0,0,0,&geocoord.latitude,&geocoord.longitude,&geocoord.elevation);
+	EVDS_LVLH_QuaternionToLVLH(&quaternion,&vector->orientation,&geocoord);
+	quaternion.q[1] = -quaternion.q[1]; //Fix for X-Plane coordinates
+	quaternion.q[3] = -quaternion.q[3];
+	EVDS_Quaternion_ToEuler(&quaternion,quaternion.coordinate_system,&roll,&pitch,&yaw);
+
+	//Request change of X-Plane aircraft, if applies
+	if (xp_request_change) {
+		XPLMSetUsersAircraft(xp_request_path);
+	}
+
+	//Mimic state of the active vessel for X-Plane camera
+	if (xp_request_change || fwas_enabled) {
+		float q[4];
+		q[0] = (float)quaternion.q[0];
+		q[1] = (float)quaternion.q[1];
+		q[2] = (float)quaternion.q[2];
+		q[3] = (float)quaternion.q[3];
+
+		XPLMSetDatad(dataref_x,x);
+		XPLMSetDatad(dataref_y,y);
+		XPLMSetDatad(dataref_z,z);
+		XPLMSetDataf(dataref_vx,0.0);
+		XPLMSetDataf(dataref_vy,0.0);
+		XPLMSetDataf(dataref_vz,0.0);
+		XPLMSetDataf(dataref_P,0.0);
+		XPLMSetDataf(dataref_Q,0.0);
+		XPLMSetDataf(dataref_R,0.0);
+		XPLMSetDatavf(dataref_q,q,0,4);
+
+		XPLMSetDataf(dataref_theta,(float)EVDS_DEG(pitch));
+		XPLMSetDataf(dataref_phi,(float)EVDS_DEG(roll));
+		XPLMSetDataf(dataref_psi,(float)EVDS_DEG(yaw));
+	}
+
+	//Complete change request
+	if (xp_request_change) {
+		xp_request_change = 0;
+	}
 
 	//Synchronize simulation with X-Plane
 	fwas->paused = XPLMGetDatai(dataref_paused);
 
 	//Do some test
-	/*{
+	{
 		EVDS_OBJECT* gimbal;
 		if (EVDS_System_GetObjectByName(fwas->system,0,"RD-171",&gimbal) == EVDS_OK) {
 			EVDS_VARIABLE* pitch_command;
@@ -200,9 +266,9 @@ float XPluginFlightLoop(float elapsedSinceLastCall, float elapsedTimeSinceLastFl
 				EVDS_Variable_SetReal(yaw_command,-10.0);
 			}
 		}
-	}*/
+	}
 
-	if (fwas->paused) {
+	if (1) { //fwas->paused) {
 		EVDS_VARIABLE* variable;
 		if (EVDS_Object_GetVariable(fwas->active_vessel,"detach",&variable) == EVDS_OK) {
 			EVDS_Variable_SetReal(variable,1.0);
@@ -236,6 +302,9 @@ PLUGIN_API int XPluginStart(char* outName, char* outSig, char* outDesc) {
 	dataref_phi   = XPLMFindDataRef("sim/flightmodel/position/phi");
 	dataref_psi   = XPLMFindDataRef("sim/flightmodel/position/psi");
 
+	//Overrides
+	override_planepath = XPLMFindDataRef("sim/operation/override/override_planepath");
+
 	//Finish initializing
 	XPFWAS_Log(FWAS_INFO,"FWAS-XP: Client initialized\n");
 	return 1;
@@ -260,8 +329,8 @@ PLUGIN_API int XPluginEnable(void) {
 	earth_inertial_space = FWAS_Object_GetByName(fwas,"Earth_Inertial_Space");
 
 	//Add home base
-	homebase = FWAS_Object_LoadFromFile(fwas,earth,"./Resources/plugins/fwas_x-plane/xsag_launchpad.evds");
-	FWAS_Object_SetActiveVessel(fwas,FWAS_Object_LoadFromFile(fwas,homebase,"./Resources/plugins/fwas_x-plane/rv505.evds"));
+	homebase = FWAS_Object_LoadFromFile(fwas,earth,PLUGIN_DIR("xsag_launchpad.evds"));
+	FWAS_Object_SetActiveVessel(fwas,FWAS_Object_LoadFromFile(fwas,homebase,PLUGIN_DIR("rv505.evds")));
 
 	//Register callbacks
 	XPLMRegisterFlightLoopCallback(XPluginFlightLoop, -1, NULL);
@@ -271,10 +340,6 @@ PLUGIN_API int XPluginEnable(void) {
 	XPLMRegisterDrawCallback(XPluginDrawCallback, xplm_Phase_Panel,			1, NULL);
 	XPLMRegisterDrawCallback(XPluginDrawCallback, xplm_Phase_Gauges,		0, NULL);
 	XPLMRegisterDrawCallback(XPluginDrawCallback, xplm_Phase_Gauges,		1, NULL);
-
-	//Disable motion of players plane
-	XPLMDisableAIForPlane(0);
-	XPLMSetActiveAircraftCount(1);
 	return 1;
 }
 
@@ -283,6 +348,7 @@ PLUGIN_API int XPluginEnable(void) {
 /// Plugin deinitialization
 ////////////////////////////////////////////////////////////////////////////////
 PLUGIN_API void XPluginDisable(void) {
+	XPFWAS_SetActive(0);
 	FWAS_Deinitialize(fwas);
 	XPFWAS_Log(FWAS_INFO,"FWAS-XP: Client stopped\n");
 
@@ -303,6 +369,26 @@ PLUGIN_API void XPluginDisable(void) {
 PLUGIN_API void XPluginReceiveMessage(XPLMPluginID fromWho, long message, void* param)
 {
 	if ((message == XPLM_MSG_PLANE_LOADED) && (!param)) {
-		///....
+		char aircraft_name[8192];
+		char aircraft_path[8192];
+		XPLMGetNthAircraftModel(0,aircraft_name,aircraft_path);
+
+		if (strcmp(aircraft_name,"fwas_null_aircraft.acf") == 0) {
+			XPFWAS_Log(FWAS_INFO,"FWAS-XP: Switched to FWAS vessel",aircraft_path);
+		} else {
+			XPFWAS_Log(FWAS_INFO,"FWAS-XP: Switched to X-Plane aircraft (%s)",aircraft_name);
+
+			//Update activeness state of FWAS
+			if (!xp_changing_aircraft) {
+				if (fwas_startup) {
+					XPFWAS_SetActive(1);
+					fwas_startup = 0;
+				} else {
+					XPFWAS_SetActive(0);
+				}
+			} else {
+				xp_changing_aircraft = 0;
+			}
+		}
 	}
 }
